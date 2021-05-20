@@ -4,16 +4,26 @@
 # docker-compose exec bank sh
 
 version: '3.8'
-services: 
+services:
+    nginx:
+        container_name: nginx
+        build: nginx
+        ports: 
+            - 80:80
+        volumes:
+            - ./nginx:/etc/nginx/
+        depends_on: 
+            - bank
+
     bank: # name of service
         build: # telling to build the image
-            context: .
+            context: ./bank
             dockerfile: Dockerfile
         command: 'python manage.py runserver 0.0.0.0:8000'
         ports: # setting the port of container
             - 8000:8000 # localhost:container
         volumes: # every change in the current directory, it will be in sync with the container 
-            - .:/app
+            - ./bank:/app
         depends_on: 
             - db
 
