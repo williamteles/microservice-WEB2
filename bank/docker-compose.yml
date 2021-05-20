@@ -1,0 +1,31 @@
+# docker-compose up --build
+# docker-compose up -d db
+# docker-compose up
+# docker-compose exec bank sh
+
+version: '3.8'
+services: 
+    bank: # name of service
+        build: # telling to build the image
+            context: .
+            dockerfile: Dockerfile
+        command: 'python manage.py runserver 0.0.0.0:8000'
+        ports: # setting the port of container
+            - 8000:8000 # localhost:container
+        volumes: # every change in the current directory, it will be in sync with the container 
+            - .:/app
+        depends_on: 
+            - db
+
+    db:
+        image: mysql:5.7.22
+        restart: always
+        environment: 
+            MYSQL_DATABASE: account
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: root
+        volumes: 
+            - .dbdata:/var/lib/mysql
+        ports: 
+            - 33066:3306
