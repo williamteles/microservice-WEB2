@@ -6,5 +6,5 @@ class Account(models.Model):
     balance = models.DecimalField(max_digits=5, decimal_places=2)
     id_owner = models.IntegerField(unique=True)
 
-account = Account(number_account = '04',balance = 200, id_owner = 2)
-account.save()
+# account = Account(number_account = '04',balance = 200, id_owner = 2)
+# account.save()
