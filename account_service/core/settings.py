@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-u%_tfyrrlg(9(l=l)4_t&y8qb!ew0wbg^kk2hv)(17jfuhz6*l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["account"]
 
 # Application definition
 
@@ -38,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'core'
+    'account'
 ]
 
 MIDDLEWARE = [
@@ -51,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'bank.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'bank.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -78,10 +77,10 @@ WSGI_APPLICATION = 'bank.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'account',
+        'NAME': 'bank',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': 'db',   # Or an IP Address that your DB is hosted on
+        'HOST': 'account-db',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
