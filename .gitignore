@@ -130,4 +130,6 @@ dmypy.json
 .pyre/
 
 # Database
-.dbdata/
+.auth_db_data/
+.account_db_data/
+
