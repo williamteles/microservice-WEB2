@@ -1,9 +1,5 @@
-# docker-compose up --build
-# docker-compose up -d db
-# docker-compose up
-# docker-compose exec bank sh
-
 version: '3.8'
+
 services:
     nginx:
         container_name: nginx
@@ -13,29 +9,46 @@ services:
         volumes:
             - ./nginx:/etc/nginx/
         depends_on: 
-            - bank
+            - account-api
+            - auth-api
 
-    bank: # name of service
-        build: # telling to build the image
-            context: ./bank
+    account-api:
+        build:
+            context: ./account_service
             dockerfile: Dockerfile
         command: 'python manage.py runserver 0.0.0.0:8000'
-        ports: # setting the port of container
-            - 8000:8000 # localhost:container
-        volumes: # every change in the current directory, it will be in sync with the container 
-            - ./bank:/app
-        depends_on: 
-            - db
+        ports:
+            - 8000:8000 
+        volumes:
+            - ./account_service:/app
+        depends_on:
+            - account-db
 
-    db:
+    account-db:
         image: mysql:5.7.22
         restart: always
         environment: 
-            MYSQL_DATABASE: account
-            MYSQL_USER: root
-            MYSQL_PASSWORD: root
+            MYSQL_DATABASE: bank
             MYSQL_ROOT_PASSWORD: root
         volumes: 
-            - .dbdata:/var/lib/mysql
+            - .account_db_data:/var/lib/mysql
         ports: 
-            - 33066:3306
+            - 3307:3306
+
+    auth-api:
+        build:
+            context: ./authentication_service
+            dockerfile: Dockerfile
+        command: 'python manage.py runserver 0.0.0.0:8000'
+        volumes:
+            - ./authentication_service:/app
+        depends_on: 
+            - auth-db
+
+    auth-db:
+        image: postgres:12
+        restart: always
+        environment:
+          POSTGRES_PASSWORD: postgres
+        volumes:
+            - .auth_db_data:/var/lib/postgresql/data
