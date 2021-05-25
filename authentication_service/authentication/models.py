@@ -12,7 +12,5 @@ class User(AbstractUser):
     email = None
 
 # from django.contrib.auth.hashers import make_password
-
-# x = User(1, make_password("1234"), "jonas", False)
-# x.save()
-
+# user = User(1, make_password("microservice"), "William", True)
+# user.save()
