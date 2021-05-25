@@ -3,7 +3,7 @@ Criamos uma simulação de um Banco. Com duas API's, uma para o usuário fazer s
 
 Imgem da arquitetura de microserviços que criamos e os passos:
 
-![Imagem das APIs](https://i.imgur.com/mTWLnhZ.png)
+![Imagem das APIs](https://i.imgur.com/OHxX1Z3.png)
 
 ***
 ## Instalar
@@ -39,11 +39,11 @@ Basta entrar, nos arquivos: `authentication_service\authentication\models.py` e 
 
 ```
 from django.contrib.auth.hashers import make_password
-user = User(1, make_password("microserviceWEB2"), "William", False)
+user = User(id=1, password=make_password("microserviceWEB2"), username="William", is_active=False)
 user.save()
 ```
 ```
-account = Account(1, "05846", 657, 1)
+account = Account(id=1, account_number="05846", balance=657, owner_id=1)
 account.save()
 ```
 
