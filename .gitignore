@@ -132,4 +132,4 @@ dmypy.json
 # Database
 .auth_db_data/
 .account_db_data/
-
+.vim/
