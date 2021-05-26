@@ -16,7 +16,7 @@ services:
         build:
             context: ./account_service
             dockerfile: Dockerfile
-        command: 'python manage.py runserver 0.0.0.0:8000'
+        command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
         ports:
             - 8000:8000 
         volumes:
@@ -39,7 +39,7 @@ services:
         build:
             context: ./authentication_service
             dockerfile: Dockerfile
-        command: 'python manage.py runserver 0.0.0.0:8000'
+        command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
         volumes:
             - ./authentication_service:/app
         depends_on: 
