@@ -15,7 +15,7 @@ Primeitamente, precisamos buildar os containers e após fazer os migrations das 
 
 Para buildar, usamos esse comando:
 
-- **docker-compose up --build**
+- **docker-compose up --build --scale auth-api=2**
 
 Após ele abriremos outro terminal para acessar o shell dos containers das API's.
 
