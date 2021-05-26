@@ -4,7 +4,7 @@ Criamos uma simulação de um Banco. Com duas API's, uma para o usuário fazer s
 
 Imgem da arquitetura de microserviços que criamos e os passos:
 
-![Imagem das APIs](https://i.imgur.com/OHxX1Z3.png)
+![Imagem das APIs](https://i.imgur.com/y1ld0RB.png)
 
 ***
 ## Instalar
