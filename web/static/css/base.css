@@ -1,0 +1,13 @@
+#menu {
+    background-color: #242526 ;
+}
+
+#menu a {
+    color : white;
+    font-family: "Segoe UI Historic", "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+#logo{
+    width: 30px;
+    height: 30px;
+}

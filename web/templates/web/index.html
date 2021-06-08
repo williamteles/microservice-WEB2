@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block css-files %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/btn-fibo.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Fibobank</h1>
+            <p class="lead text-muted">O melhor e mais seguro banco da galaxia. Aqui sem juros são quase zero!</p>
+            <br>
+            <p>
+                <a href="{% url 'web:login' %}" class="btn-fibo-1 my-2"> Acesse sua conta</a>
+                <a href="{% url 'web:register_user' %}" class="btn-fibo-2 my-2">Crie já sua conta</a>
+            </p>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <h2>Open Banking</h2>
+                <p>Participe e tenha ofertas e beneficios mais personalidados.</p>
+            </div>
+            <div class="col-lg-4">
+                <h2>Renegociação</h2>
+                <p>Quite suas dívidas agora com as condições especias do Fibobank.</p>
+            </div>
+            <div class="col-lg-4">
+                <h2>Empréstimos</h2>
+                <p>Soluções para realizar seus planos ou organizar suas finanças.</p>
+            </div>
+        </div>
+    </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,29 @@
+.btn-fibo-1 {
+    text-decoration: none;
+    background-color: #17bf63;
+    color: white;
+    padding: 8px 6px 8px 6px;
+    border-radius: 5%;
+}
+
+.btn-fibo-1:hover{
+    background-color: #158648;
+    color: white;
+}
+
+
+
+.btn-fibo-2 {
+    text-decoration: none;
+    background-color: #454749;
+    color: white;
+    padding: 8px 6px 8px 6px;
+    border-radius: 5%;
+}
+
+.btn-fibo-2:hover{
+    background-color: #242526 ;
+    color: white;
+}
+
+
