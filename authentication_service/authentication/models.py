@@ -10,7 +10,3 @@ class User(AbstractUser):
     last_name = None
     date_joined = None
     email = None
-
-# from django.contrib.auth.hashers import make_password
-# user = User(1, make_password("microservice"), "William", True)
-# user.save()
