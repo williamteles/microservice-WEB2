@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block css-files %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/btn-fibo.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center register">
+    
+    <main class="form-signin shadow p-3 mb-5 bg-white rounded">
+        
+        <h1 class="h3 mb-3 fw-normal">Cadastro da FiboConta</h1>
+        
+        <form method="post">
+
+            {% csrf_token %}
+            
+            <select name="type_account" class="form-select" required>
+                <option selected>---- ------</option>
+                <option value="poupanca">Conta Poupança</option>
+                <option value="corrente">Conta Corrente</option>
+                <option value="salario">Conta Salario</option>
+            </select>
+            
+            <button type="submit" class="btn btn-lg btn-success">Criar conta</button>
+            
+        </form>
+        
+    </main>
+    
+</div>
+{% endblock %}

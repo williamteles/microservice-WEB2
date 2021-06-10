@@ -1,0 +1,27 @@
+section > .container {
+    padding: 80px 15px 0;
+}
+
+.row {
+    margin-top: 10px;
+}
+
+.saldo {
+    text-align: left;
+}
+
+.saldo-conta {
+    font-size: 40px;
+    font-weight: bold;
+    width: 80%;
+}
+
+.historic {
+    justify-content: right;
+    justify-items: right;
+}
+
+.user-data {
+    background-color: #17bf63;
+    border-radius: 1%;
+}

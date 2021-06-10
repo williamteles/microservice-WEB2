@@ -1,5 +1,9 @@
+body{
+    background-color: #242526;
+}
+
 #menu {
-    background-color: #242526 ;
+    background-color: #18191a;
 }
 
 #menu a {
@@ -10,4 +14,8 @@
 #logo{
     width: 30px;
     height: 30px;
+}
+
+main > .container{
+    padding: 60px 15px 0;
 }
