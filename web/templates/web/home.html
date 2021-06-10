@@ -2,82 +2,112 @@
 
 {% block css-files %}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <link rel="stylesheet" href="{% static 'css/btn-fibo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 
 
 {%  block content %}
 
-
-<section class="container">
-
-    <h2 style="color: whitesmoke;">Olá, Chefe Jacquan!</h2>
-    
     <div class="row">
 
-        <div class="col-sm-3 col-md-3">
-            <div class="row">
-                <div class="col-sm-2 col-md-4">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Cartões</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Faturas & Saldos</h6>
-                            <p class="card-text">Avalie seus saldos/creditos dos seus cartões fibo, além de consultar suas faturas.</p>
-                            <a href="#" class="card-link btn-fibo-1">Clique aqui</a>
-                        </div>
-                    </div>
+        <h2 style="color:whitesmoke">Olá, Chefe Jacquan.</h2>
+
+        <div class="col-sm-4 col-md-3">
+            <div class="card info">
+                <div class="card-body">
+                    <h5 class="card-title">Cartões</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Faturas & Saldos</h6>
+                    <p class="card-text">Avalie seus saldos/creditos dos seus cartões fibo, além de consultar suas faturas.</p>
+                    <button type="button" class="btn-fibo-1" data-bs-toggle="modal" data-bs-target="#cartao">clique aqui</button>
                 </div>
             </div>
-            
-            <div class="row">
-                <div class="col-sm-2 col-md-4">
-                    <div class="card" style="width: 18rem;">
+
+
+            <div class="card info">
+                <div class="card-body">
+                    <h5 class="card-title">Transações</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Depositos & Pagamenos</h6>
+                    <p class="card-text">Realize seus depositos, pagamentos e transferencias de sua fiboconta, além de consultar o credito de emprestimos.</p>
+                    <button type="button" class="btn-fibo-1" data-bs-toggle="modal" data-bs-target="#trasition">clique aqui</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-4 col-md-9">
+
+            <div class="row user-data">
+
+                <div class="col-md-5">
+                    <div class="card saldo"> <!---26.83rem-->
                         <div class="card-body">
-                            <h5 class="card-title">Transações</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Depositos & Pagamenos</h6>
-                            <p class="card-text">Realize seus depositos, pagamentos e transferencias de sua fiboconta, além de consultar o credito de emprestimos.</p>
-                            <a href="#" class="card-link btn-fibo-1">Clique aqui</a>
+                            <h4 class="card-subtitle">Saldo disponivel</h4>
+                            <p class="card-text saldo-conta">R$ 740.000,00</p>
+                            <h4 class="card-subtitle"></h4>
                         </div>
                     </div>
                 </div>
                 
-            </div>
-        </div> <!-- coluna dos cards-->
-        
-        <div class="col-sm-7 col-md-9">
-
-            <div class="row user-data">
-
-                <div class="col-sm-10 col-md-12">
-
-                    <div class="row" style="height: 26.35rem;">
-
-                        <div class="col-md-4">
-
-                            <div class="card" style="width: 100%; height: 26rem;"> <!--26.83rem-->
-                                <div class="card-body saldo">
-                                    <h4 class="card-subtitle">Saldo disponivel</h4>
-                                    <p class="card-text saldo-conta">R$ 740,00</p>
-
-                                    <h4 class="card-subtitle"></h4>
-                                </div>
-                            </div>
-                            
+                <div class="col-md-7"> 
+                    <div class="card extrato">
+                        <div class="card-body">
+                            <h4 class="card-subtitle">Extrato</h4> <historico de transações
                         </div>
-
-                        <div class="col-md-8">
-                            <div class="card" style="width: 100%; height: 13.42rem;">
-                                <div class="card-body">
-                                    <h4 class="card-subtitle">Extrato</h4> <!--historico de transações-->
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
+
             </div>
         </div>
+
+    </div>
         
-</section>
+      
+    <div class="modal fade" id="cartao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Seus Cartões</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <select name="" id="" class="form-select">
+                    <option selected>---- ----</option>
+                    <option>cartões</option>
+                    <option>cartões</option>
+                    <option>cartões</option>
+                    <option>cartões</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="trasition" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Suas Transações</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <select name="" id="" class="form-select">
+                    <option selected>---- ----</option>
+                    <option>Pagamento</option>
+                    <option>Deposito</option>
+                    <option>Transferencias</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
 {% endblock %}

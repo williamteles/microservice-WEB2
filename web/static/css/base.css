@@ -16,6 +16,6 @@ body{
     height: 30px;
 }
 
-main > .container{
-    padding: 60px 15px 0;
+main > .container-fluid{
+    padding: 100px 50px 0px;
 }

@@ -1,27 +1,32 @@
-section > .container {
-    padding: 80px 15px 0;
-}
-
-.row {
-    margin-top: 10px;
-}
-
-.saldo {
-    text-align: left;
-}
-
-.saldo-conta {
-    font-size: 40px;
-    font-weight: bold;
-    width: 80%;
-}
-
-.historic {
-    justify-content: right;
-    justify-items: right;
+.info {
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: justify;
 }
 
 .user-data {
     background-color: #17bf63;
     border-radius: 1%;
+}
+
+.saldo {
+    text-align: left;
+    margin: 10px 5px 10px 0px;
+    height: 400px;
+}
+
+.saldo-conta {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.extrato {
+    text-align: left;
+    margin: 10px 0px 0px 0px;
+    height: 200px;
+}
+
+.historic {
+    justify-content: right;
+    justify-items: right;
 }
