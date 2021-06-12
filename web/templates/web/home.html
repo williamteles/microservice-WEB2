@@ -29,7 +29,7 @@
                     <h5 class="card-title">Transações</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Depositos & Pagamenos</h6>
                     <p class="card-text">Realize seus depositos, pagamentos e transferencias de sua fiboconta, além de consultar o credito de emprestimos.</p>
-                    <button type="button" class="btn-fibo-1" data-bs-toggle="modal" data-bs-target="#trasition">clique aqui</button>
+                    <button type="button" class="btn-fibo-1" data-bs-toggle="modal" data-bs-target="#transition">clique aqui</button>
                 </div>
             </div>
 
@@ -71,43 +71,70 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <select name="" id="" class="form-select">
+                <select name="" id="cartões" class="form-select">
                     <option selected>---- ----</option>
                     <option>cartões</option>
                     <option>cartões</option>
                     <option>cartões</option>
                     <option>cartões</option>
                 </select>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-6">
+                        <label>Numero do Cartão</label>
+                        <input type="text" value="xxxx xxxx xxxx xxxx" class="form-control" disabled>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Validade</label>
+                        <input type="text" value="mm/yyyy" class="form-control" disabled>
+                    </div>
+                    <div class="col-md-3">
+                        <label>CVV</label>
+                        <input type="text" value="XXX" class="form-control" disabled>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-6">
+                        <label>Fatura</label>
+                        <input type="text" value="R$ 5.000.000,00" class="form-control" style="width: auto;" disabled>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Limite</label>
+                        <input type="text" class="form-control" value="R$ 5000,00" style="width: auto;" disabled>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bloquear</button>
             </div>
           </div>
         </div>
     </div>
 
-    <div class="modal fade" id="trasition" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="transition" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Suas Transações</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <select name="" id="" class="form-select">
+            <div class="modal-body" id="transition-div">
+                <select name="" id="transacao" class="form-select">
                     <option selected>---- ----</option>
-                    <option>Pagamento</option>
-                    <option>Deposito</option>
-                    <option>Transferencias</option>
+                    <option value="pagamento">Pagamento</option>
+                    <option value="deposito">Deposito</option>
+                    <option value="transferencias">Transferencias</option>
                 </select>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="row" style="margin-top: 10px;" id="transition-div-row">
+
+                </div>
             </div>
           </div>
         </div>
     </div>
 
+{% endblock %}
+
+{% block js-files %}
+    {% load static %}
+    <script src="{% static 'js/transacao.js'%}"></script>
 {% endblock %}
