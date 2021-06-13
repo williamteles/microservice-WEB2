@@ -1,10 +1,11 @@
 from .models import User
-from .serializers import CustomTokenVerifySerializer
+from .serializers import CustomTokenVerifySerializer, UserSerializer
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenVerifyView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
 
 
 class LoginView(APIView):
@@ -15,11 +16,7 @@ class LoginView(APIView):
             username = request.data["username"]
             password = request.data["password"]
 
-            user = User.objects.get(username=username)
-
-            # Check if the password matches with the user's password
-            if not user.check_password(password):
-                raise User.DoesNotExist()
+            user = User.objects.get(username=username, password=password)
 
         except KeyError:
             error_message = "Request must contain a username and password"
@@ -29,6 +26,7 @@ class LoginView(APIView):
             error_message = "Username and Password are invalid, User does not exists"
             return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
 
+        # Set user status as logged
         user.is_active = True
         user.save()
 
@@ -44,6 +42,16 @@ class LoginView(APIView):
         tokens = {"refresh": str(refresh_token), "access": str(access_token)}
 
         return tokens
+
+
+class UserList(ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetail(RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class CustomTokenVerifyView(TokenVerifyView):
