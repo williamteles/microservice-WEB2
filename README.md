@@ -92,7 +92,8 @@ Primeiramente, precisaremos ter o Postman ou Insomnia ou outro programa de sua p
 ***
 ## Planos futuros
 
-Pretendemos no futuro melhorar esse projeto com a atividade CRUD, adicionando cadastro e outras funcionalidades.
+Pretendemos, no futuro, melhorar esse projeto com a atividade CRUD, adicionando
+cadastro e outras funcionalidades.
 ***
 ## Estudantes
 - Alex Emanuel
