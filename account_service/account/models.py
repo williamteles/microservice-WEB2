@@ -21,11 +21,6 @@ class Account(models.Model):
     type_account = models.ForeignKey(AccountType, on_delete=models.PROTECT)
 
 
-class LoanCredit(models.Model):
-    credit = models.DecimalField(max_digits=18, decimal_places=10)
-    account = models.ForeignKey(Account, on_delete=models.PROTECT)
-
-
 class Card(models.Model):
     card_number = models.CharField(max_length=16, unique=True)
     expire_date = models.DateField(blank=False)
