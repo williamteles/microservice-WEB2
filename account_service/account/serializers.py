@@ -16,10 +16,6 @@ class AccountTypeSerializer(ModelSerializer):
         model = AccountType
         fields = ['__all__']
 
-class LoanCreditSerializer(ModelSerializer):
-    class Meta:
-        model = LoanCredit
-        fields = ['__all__']
 
 class CardSerializer(ModelSerializer):
     class Meta:
