@@ -8,7 +8,7 @@ class AccountType(models.Model):
         ('salario', 'Conta Salário')
     )
 
-    type = models.CharField(max_length=50, choices=TYPE, null=False)
+    type = models.CharField(max_length=50, choices=TYPE)
 
     def __str__(self):
         return f"{self.type}"
@@ -18,7 +18,7 @@ class Account(models.Model):
     account_number = models.CharField(max_length=10, unique=True)
     balance = models.DecimalField(max_digits=18, decimal_places=10)
     owner_id = models.IntegerField(unique=True)
-    type_account = models.ForeignKey(AccountType, on_delete=models.PROTECT)
+    type_account = models.ForeignKey(AccountType, on_delete=models.PROTECT, null=True)
 
 
 class Card(models.Model):
@@ -31,7 +31,7 @@ class Card(models.Model):
     is_blocked = models.BooleanField(default=False)
     bill = models.DecimalField(max_digits=18, decimal_places=10)
     limit = models.DecimalField(max_digits=18, decimal_places=10)
-    account = models.Model(Account, on_delete=models.PROTECT)
+    account = models.ForeignKey(Account, on_delete=models.PROTECT)
 
 
 class TransactionsType(models.Model):
@@ -42,7 +42,7 @@ class TransactionsType(models.Model):
         ('compra', 'Compra')
     )
 
-    type = models.CharField(max_length=50, choices=TYPE, null=False)
+    type = models.CharField(max_length=50, choices=TYPE)
 
     def __str__(self):
         return f"{self.type}"
@@ -65,5 +65,5 @@ class Transactions(models.Model):
     value = models.DecimalField(max_digits=18, decimal_places=10)
     parcelas = models.PositiveIntegerField(max_length=3)
     categories = models.CharField(max_length=50, choices=CATEGORIES)
-    type_transaction = models.ForeignKey(TransactionsType, on_delete=models.PROTECT)
+    type_transaction = models.ForeignKey(TransactionsType, on_delete=models.PROTECT, null=True)
     card = models.ForeignKey(Card, on_delete=models.PROTECT)
