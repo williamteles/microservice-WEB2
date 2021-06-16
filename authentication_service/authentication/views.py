@@ -79,7 +79,7 @@ class UserDetail(mixins.RetrieveModelMixin,
         try:
             response = self.retrieve(request, *args, **kwargs)
         except Http404 as e:
-            response = Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
         return response
 
@@ -87,7 +87,7 @@ class UserDetail(mixins.RetrieveModelMixin,
         try:
             response = self.update(request, *args, **kwargs)
         except Http404 as e:
-            response = Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         except ValidationError as e:
             error_message = generate_error_message(e.detail)
             response = Response({"message": error_message}, status=e.status_code)
@@ -98,7 +98,7 @@ class UserDetail(mixins.RetrieveModelMixin,
         try:
             response = self.destroy(request, *args, **kwargs)
         except Http404 as e:
-            response = Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         except ValidationError as e:
             error_message = generate_error_message(e.detail)
             response = Response({"message": error_message}, status=e.status_code)
