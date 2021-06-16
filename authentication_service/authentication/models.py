@@ -9,4 +9,3 @@ class User(AbstractUser):
     last_login = None
     last_name = None
     date_joined = None
-    email = None
