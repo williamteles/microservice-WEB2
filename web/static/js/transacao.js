@@ -6,6 +6,8 @@ transition.addEventListener('change', () => {
 
         case 'pagamento':
 
+            $('#transition-div-row').empty();
+
             var rowNode = document.getElementById('transition-div-row');
             
             var colNode = document.createElement('div');

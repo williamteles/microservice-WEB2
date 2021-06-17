@@ -22,11 +22,11 @@ class LoginView(APIView):
             user = User.objects.get(username=username, password=password)
 
         except KeyError:
-            error_message = "Request must contain a username and password"
+            error_message = "A solicitação deve conter um usuário e uma senha"
             return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
 
         except User.DoesNotExist:
-            error_message = "Username and Password are invalid, User does not exists"
+            error_message = "Senha inválida ou Usuário não existe"
             return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
 
         # Set user status as logged
