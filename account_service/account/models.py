@@ -18,7 +18,7 @@ class Account(models.Model):
     account_number = models.CharField(max_length=10, unique=True)
     balance = models.DecimalField(max_digits=18, decimal_places=10)
     owner_id = models.IntegerField(unique=True)
-    type_account = models.ForeignKey(AccountType, on_delete=models.PROTECT,null=True)
+    type_account = models.ForeignKey(AccountType, on_delete=models.PROTECT, null=True)
 
 
 class Card(models.Model):
@@ -65,5 +65,5 @@ class Transactions(models.Model):
     value = models.DecimalField(max_digits=18, decimal_places=10)
     parcelas = models.PositiveIntegerField(max_length=3)
     categories = models.CharField(max_length=50, choices=CATEGORIES)
-    type_transaction = models.ForeignKey(TransactionsType, on_delete=models.PROTECT)
+    type_transaction = models.ForeignKey(TransactionsType, on_delete=models.PROTECT, null=True)
     card = models.ForeignKey(Card, on_delete=models.PROTECT)
