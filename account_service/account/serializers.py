@@ -3,7 +3,7 @@ from typing import ClassVar
 from django.db import models
 from django.db.models import fields
 from rest_framework.serializers import ModelSerializer
-from .models import Account, Card, LoanCredit, AccountType, Transactions, TransactionsType
+from .models import Account, Card, AccountType, Transactions, TransactionsType
 
 
 class AccountSerializer(ModelSerializer):
@@ -30,4 +30,4 @@ class TransactionsSerializer(ModelSerializer):
 class TransactionsTypeSerializer(ModelSerializer):
     class Meta:
         model = TransactionsType
-        fields ['__all__']
+        fields = ['__all__']

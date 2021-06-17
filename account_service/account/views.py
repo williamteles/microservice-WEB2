@@ -8,7 +8,7 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.response import Response
 
-from account_service.account import serializers
+# from account_service.account import serializers
 
 
 # class AccountView(APIView):
