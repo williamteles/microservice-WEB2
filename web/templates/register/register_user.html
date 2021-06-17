@@ -28,7 +28,11 @@
             <button type="submit" class="btn btn-lg btn-success">Continuar</button>
             
         </form>
-        
+
+        {% if has_error %}
+                <p class="messages" >{{error_message}}</p>
+        {% endif %}
+
         <p>Já cadastrado? <a href="{% url 'web:login' %}">Login</a></p>
         
     </main>
