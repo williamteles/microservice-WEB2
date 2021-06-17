@@ -14,10 +14,6 @@
         
         <h1 class="h3 mb-3 fw-normal">Cadastro da FiboConta</h1>
 
-        {% if has_error %}
-                <p>{{error_message}}</p>
-        {% endif %}
-
         <form method="post">
 
             {% csrf_token %}
