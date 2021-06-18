@@ -125,9 +125,93 @@
                     <option value="transferencias">Transferencias</option>
                     <option value="compra">Compra</option>
                 </select>
-                <div class="row" style="margin-top: 10px;" id="transition-div-row">
+                <div style="margin-top: 10px;" id="transition-div-row">
+
+                    <div id="payment" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Valor da Fatura</label>
+                                <input type="text" class="form-control" value="R$ 00,00" disabled>
+                            </div>
+                            
+                            <div class="col-md-6" style="margin-top: 15px;">
+                                <form action="POST" style="margin-top: 10px;">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <input type="number" class="form-control" name="pagamento">
+                                        </div>
+                                        <div class="col-md-5">
+                                            <button class="btn-fibo-1" style="width: 100px;">Pagar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="deposit" style="display:none;">
+                        <form action="POST">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Valor para deposito</label>
+                                    <input type="number" class="form-control" name="deposito">
+                                </div>
+                                <div class="col-md-6" style="margin-top: 15px;">
+                                    <button class="btn-fibo-1" style="width: 100px;">Depositar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="transfer" style="display: none;">
+                        <form action="POST">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Valor</label>
+                                    <input type="number" class="form-control" name="valor">
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Conta</label>
+                                    <input type="text" name="conta" class="form-control">
+                                </div>
+                                <div class="col-md-4" style="margin-top: 15px;"> 
+                                    <button class="btn-fibo-1" style="width: 100px;">Transferir</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="buy" style="display: none;">
+                        <form action="POST">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <select name="compra" id="" class="form-select">
+                                        <option selected>---- ----</option>
+                                        <option value="restaurante">Restaurante</option>
+                                        <option value="transporte">Transporte</option>
+                                        <option value="servicos">Serviços</option>
+                                        <option value="supermercado">Supermercado</option>
+                                        <option value="lazer">Lazer</option>
+                                        <option value="educacao">Educação</option>
+                                        <option value="eletronicos">Eletronicos</option>
+                                        <option value="saude">Saúde</option>
+                                        <option value="casa">Casa</option>
+                                        <option value="outros">Outros</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-5">
+                                    <input type="number" name="valor" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 10px;">
+                                <button class="btn-fibo-1" >Comprar</button>
+                            </div>
+                        </form>
+                    </div>
 
                 </div>
+
             </div>
           </div>
         </div>
