@@ -12,6 +12,7 @@ services:
             - web
 
     web:
+        container_name: web
         build: 
             context: ./web
             dockerfile: Dockerfile
@@ -25,22 +26,22 @@ services:
             - auth-api
 
     account-api:
+        container_name: account-api
         build:
             context: ./account_service
             dockerfile: Dockerfile
         command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-        ports:
-            - 8000:8000 
         volumes:
             - ./account_service:/app
         depends_on:
             - account-db
 
     account-db:
+        container_name: account-db
         image: mysql:5.7.22
         restart: always
         environment: 
-            MYSQL_DATABASE: bank
+            MYSQL_DATABASE: account
             MYSQL_ROOT_PASSWORD: root
         volumes: 
             - .account_db_data:/var/lib/mysql
@@ -48,6 +49,7 @@ services:
             - 3307:3306
 
     auth-api:
+        container_name: auth-api
         build:
             context: ./authentication_service
             dockerfile: Dockerfile
@@ -58,6 +60,7 @@ services:
             - auth-db
 
     auth-db:
+        container_name: auth-db
         image: postgres:12
         restart: always
         environment:
