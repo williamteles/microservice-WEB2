@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-u%_tfyrrlg(9(l=l)4_t&y8qb!ew0wbg^kk2hv)(17jfuhz6*l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["account"]
+ALLOWED_HOSTS = ["account", "account-api"]
 
 # Application definition
 
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bank',
+        'NAME': 'account',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'account-db',   # Or an IP Address that your DB is hosted on
