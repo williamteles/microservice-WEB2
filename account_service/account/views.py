@@ -1,12 +1,12 @@
-from django.db.models import query
-from .helpers.token_helpers import extract_token, validate_token, get_user_id
-from .models import Account, AccountType, Card, Transactions, TransactionsType
+from .models import Account, Card, Transactions
 from .serializers import AccountSerializer, AccountTypeSerializer, CardSerializer, TransactionsSerializer, TransactionsTypeSerializer
+from django.http import Http404
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework import mixins
 from rest_framework import generics
+from .utils import generate_error_message
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 
 # from account_service.account import serializers
 
@@ -40,8 +40,7 @@ from rest_framework.response import Response
 #         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class AccountCRUD(mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
+class AccountDetail(mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     generics.GenericAPIView):
@@ -51,49 +50,66 @@ class AccountCRUD(mixins.CreateModelMixin,
     
     def get(self, request, *args, **kwargs):
         try:
-            return self.retrieve(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar recuperar a conta"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            response = self.retrieve(request, *args, **kwargs)
+        except Http404 as e:
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request, *args, **kwargs):
-        try:
-            return self.create(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar criar a conta"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)            
+        return response
 
     def put(self, request, *args, **kwargs):
         try:
-            return self.update(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar atualizar a conta"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            response = self.update(request, *args, **kwargs)
+        except Http404 as e:
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError as e:
+            error_message = generate_error_message(e.detail)
+            response = Response({"message": error_message}, status=e.status_code)
+
+        return response
 
     def delete(self, request, *args, **kwargs):
         try:
-            return self.destroy(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar deletar a conta"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            response = self.destroy(request, *args, **kwargs)
+        except Http404 as e:
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError as e:
+            error_message = generate_error_message(e.detail)
+            response = Response({"message": error_message}, status=e.status_code)
+
+        return response
+
+
+class AccountList(mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    generics.GenericAPIView):
+
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            response = self.create(request, *args, **kwargs)
+        except ValidationError as e:
+            error_message = generate_error_message(e.detail)
+            response = Response({"message": error_message}, status=e.status_code)
+
+        return response
 
 
 class AccountTypeReader(mixins.RetrieveModelMixin,
     generics.GenericAPIView):
 
-    queryset= AccountType.objects.all()
+    queryset= Account.objects.all()
     serializer_class = AccountTypeSerializer
 
     def get(self, request, *args, **kwargs):
-        try:
-            return self.retrieve(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar recuperar o tipo da conta"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+        return self.retrieve(request, *args, **kwargs)
 
 
-class CardCRUD(mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
+class CardDetail(mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     generics.GenericAPIView):
@@ -103,35 +119,56 @@ class CardCRUD(mixins.CreateModelMixin,
 
     def get(self, request, *args, **kwargs):
         try:
-            return self.retrieve(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar recuperar o cartão"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            response = self.retrieve(request, *args, **kwargs)
+        except Http404 as e:
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request, *args, **kwargs):
-        try:
-            return self.create(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar criar o cartão"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)            
+        return response
 
     def put(self, request, *args, **kwargs):
         try:
-            return self.update(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar atualizar o cartão"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            response = self.update(request, *args, **kwargs)
+        except Http404 as e:
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError as e:
+            error_message = generate_error_message(e.detail)
+            response = Response({"message": error_message}, status=e.status_code)
+
+        return response
 
     def delete(self, request, *args, **kwargs):
         try:
-            return self.destroy(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar deletar o cartão"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            response = self.destroy(request, *args, **kwargs)
+        except Http404 as e:
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError as e:
+            error_message = generate_error_message(e.detail)
+            response = Response({"message": error_message}, status=e.status_code)
+
+        return response
 
 
-class TransactionsCRUD(mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
+class CardList(mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    generics.GenericAPIView):
+
+    queryset = Card.objects.all()
+    serializer_class = CardSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            response = self.create(request, *args, **kwargs)
+        except ValidationError as e:
+            error_message = generate_error_message(e.detail)
+            response = Response({"message": error_message}, status=e.status_code)
+
+        return response
+
+
+class TransactionsDetail(mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     generics.GenericAPIView):
@@ -141,42 +178,60 @@ class TransactionsCRUD(mixins.CreateModelMixin,
 
     def get(self, request, *args, **kwargs):
         try:
-            return self.retrieve(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar recuperar a transação"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            response = self.retrieve(request, *args, **kwargs)
+        except Http404 as e:
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request, *args, **kwargs):
-        try:
-            return self.create(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar criar a transação"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)            
+        return response
 
     def put(self, request, *args, **kwargs):
         try:
-            return self.update(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar atualizar a transação"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            response = self.update(request, *args, **kwargs)
+        except Http404 as e:
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError as e:
+            error_message = generate_error_message(e.detail)
+            response = Response({"message": error_message}, status=e.status_code)
+
+        return response
 
     def delete(self, request, *args, **kwargs):
         try:
-            return self.destroy(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar deletar a transação"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+            response = self.destroy(request, *args, **kwargs)
+        except Http404 as e:
+            response = Response({"message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError as e:
+            error_message = generate_error_message(e.detail)
+            response = Response({"message": error_message}, status=e.status_code)
+
+        return response
 
 
-class TransactionsTypeReader(mixins.RetrieveModelMixin,
+class TransactionsList(mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     generics.GenericAPIView):
 
-    queryset= TransactionsType.objects.all()
+    queryset = Transactions.objects.all()
+    serializer_class = TransactionsSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            response = self.create(request, *args, **kwargs)
+        except ValidationError as e:
+            error_message = generate_error_message(e.detail)
+            response = Response({"message": error_message}, status=e.status_code)
+
+        return response
+
+
+class TransactionsTypeReader(mixins.ListModelMixin,
+    generics.GenericAPIView):
+
+    queryset= Transactions.objects.all()
     serializer_class = TransactionsTypeSerializer
 
     def get(self, request, *args, **kwargs):
-        try:
-            return self.retrieve(request, *args, **kwargs)
-        except:
-            error_message = "Erro ao tentar recuperar o tipo da conta"
-            return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
+        return self.list(request, *args, **kwargs)
