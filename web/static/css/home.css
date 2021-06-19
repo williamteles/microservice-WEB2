@@ -34,7 +34,17 @@
 }
 
 #scroll::-webkit-scrollbar{
-    display: none;
+    width: 12px;
+}
+
+#scroll::-webkit-scrollbar-track {
+    background: #242526;        /* color of the tracking area */
+  }
+
+#scroll::-webkit-scrollbar-thumb{
+    background-color: #17bf63;    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
+    border: 3px solid #242526;  
 }
 
 .historic {
@@ -46,6 +56,7 @@
     margin-top: 10px;
     height: min-content;
     display: flex;
+    margin-right: 5px;
 }
 
 .extrato-list p {

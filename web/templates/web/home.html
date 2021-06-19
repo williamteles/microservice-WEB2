@@ -56,7 +56,7 @@
                             <h6>Extratos pagos</h6>
                             <div id="scroll">
                                 {% for extrato in transactions%}
-                                <div class="alert alert-dark extrato-list">
+                                <div class="alert alert-dark extrato-list" id="{{extrato.id}}">
                                     <p class="form-control">R$ {{extrato.value}}</p>
                                     <p class="form-control">{{extrato.date}}</p>
                                     <p class="form-control">{{extrato.categories}}</p>
