@@ -26,6 +26,17 @@
     height: 400px;
 }
 
+#scroll {
+    height: 300px;
+    display: block;
+    overflow-y:scroll;
+    width: 100%;
+}
+
+#scroll::-webkit-scrollbar{
+    display: none;
+}
+
 .historic {
     justify-content: right;
     justify-items: right;
