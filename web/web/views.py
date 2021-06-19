@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .utils import rand_N_digits
+from .utils import get_account_from_owner, get_card_from_account, get_transactions_from_card, rand_N_digits
 import requests
 import datetime
 from dateutil.relativedelta import relativedelta
@@ -28,7 +28,7 @@ def login(request):
         else:
             context = {"has_error": True, "error_message": payload["message"]}
             
-            response = render(request, 'register/login.html',dict(context))
+            response = render(request, 'register/login.html', dict(context))
 
         return response
 
@@ -61,7 +61,7 @@ def register_account(request):
 
     if request.method == "POST":
         type_account = request.POST.get("type_account")
-        # owner_id = request.POST.get("ownerId")
+        # owner_id = request.POST.get("owner_id")
         owner_id = 3
         balance = 0
         
@@ -82,7 +82,6 @@ def register_account(request):
                 
         
         account_id = payload["id"]
-        print(account_id)
         prefix_card_number = "3897 2468"
         # password = request.POST.get("card_password")
         password = 2531
@@ -91,7 +90,6 @@ def register_account(request):
         has_credit = True if type_account == "corrente" else False
         bill = 0
         limit = 1200
-        print("SETEI AS COISAS")
         for i in range(MAX_TRIES):
             card_number_part1 = " " + str(rand_N_digits(4))
             card_number_part2 = " " + str(rand_N_digits(4))
@@ -102,17 +100,11 @@ def register_account(request):
                     "bill": bill, "limit": limit, "account": account_id}
 
             api_response = requests.post("http://account-api:8000/acct/card/", json=body)
-            print("FIZ REQUEST")
-            print(payload)
             payload = api_response.json()
-            print(payload)
             if api_response.status_code == 201:
-                print('BREAK')
                 break
             elif i == MAX_TRIES - 1:
-                print("ERROR")
                 context = {"has_error": True, "error_message": payload["message"]}
-                print(context)
                 return render(request, 'register/register_account.html', dict(context))
 
         return redirect('web:home')
@@ -121,4 +113,28 @@ def register_account(request):
 
 
 def home(request):
-    return render(request,'web/home.html',{})
+    if request.method == "POST":
+        owner_id = request.POST.get("owner_id")
+        
+        api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
+        payload = api_response_user.json()
+
+        if api_response_user.status_code == 200:
+            account = get_account_from_owner(owner_id)
+            
+            if "has_error" not in account:
+                account_card = get_card_from_account(account["id"])
+
+                transactions_account = get_transactions_from_card(account_card["id"])
+
+                context = {"username": payload["username"], "balance": account["balance"], "card": dict(account_card), "transactions": dict(transactions_account)}
+                return render(request, "web/home.html", dict(context))
+            else:
+                context = account
+                return render(request, "web/index.html", dict(context))
+        else:
+            context = {"has_error": True, "error_message": payload["message"]}
+            return render(request, "web/inxex.html", dict(context))
+
+
+    return render(request, "web/home.html", {})
