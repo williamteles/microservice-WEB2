@@ -45,7 +45,7 @@ class AccountDetail(mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
     generics.GenericAPIView):
     
-    queryset= Account.objects.all()
+    queryset = Account.objects.all()
     serializer_class = AccountSerializer
     
     def get(self, request, *args, **kwargs):
