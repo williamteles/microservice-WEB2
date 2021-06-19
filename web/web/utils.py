@@ -17,24 +17,20 @@ def get_account_from_owner(owner_id):
         for account in accounts:
             if account["owner_id"] == owner_id:
                 return account
-        return None
     else:
         error = {"has_error": True, "error_message": accounts["message"]}
         return error
 
 
 def get_card_from_account(account_id):
-    response = requests.get("http://account-api:8000/acct/card/").json()
+    response = requests.get("http://account-api:8000/acct/card/")
     cards = response.json()
 
     if response.status_code == 200:
-        account_cards = []
-
+    
         for card in cards:
-            if card["account_id"] == account_id:
-                account_cards.append(card)
-        
-        return account_cards
+            if card["account"] == account_id:
+                return card        
     else:
         error = {"has_error": True, "error_message": cards["message"]}
         return error

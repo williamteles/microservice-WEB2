@@ -62,7 +62,7 @@ def register_account(request):
     if request.method == "POST":
         type_account = request.POST.get("type_account")
         # owner_id = request.POST.get("owner_id")
-        owner_id = 3
+        owner_id = 1
         balance = 0
         
         for i in range(MAX_TRIES):
@@ -113,8 +113,9 @@ def register_account(request):
 
 
 def home(request):
-    if request.method == "POST":
-        owner_id = request.POST.get("owner_id")
+    if request.method == "GET":
+        # owner_id = request.POST.get("owner_id")
+        owner_id = 1
         
         api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
         payload = api_response_user.json()
@@ -126,15 +127,15 @@ def home(request):
                 account_card = get_card_from_account(account["id"])
 
                 transactions_account = get_transactions_from_card(account_card["id"])
-
-                context = {"username": payload["username"], "balance": account["balance"], "card": dict(account_card), "transactions": dict(transactions_account)}
-                return render(request, "web/home.html", dict(context))
+                print(payload["username"])
+                context = {"username": payload["username"], "balance": account["balance"], "card": account_card, "transactions": transactions_account}
+                print(context)
+                return render(request, 'web/home.html', dict(context))
             else:
                 context = account
                 return render(request, "web/index.html", dict(context))
         else:
             context = {"has_error": True, "error_message": payload["message"]}
-            return render(request, "web/inxex.html", dict(context))
+            return render(request, "web/index.html", dict(context))
 
-
-    return render(request, "web/home.html", {})
+    return render(request, "web/home.html")

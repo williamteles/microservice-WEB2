@@ -11,7 +11,7 @@
 
     <div class="row">
 
-        <h2 style="color:whitesmoke">Olá, {{titulo}} {{nome}}.</h2>
+        <h2 style="color:whitesmoke">Olá, {{username}}.</h2>
 
         <div class="col-sm-4 col-md-3">
             <div class="card info">
@@ -43,7 +43,7 @@
                     <div class="card saldo"> <!---26.83rem-->
                         <div class="card-body">
                             <h4 class="card-subtitle">Saldo disponivel</h4>
-                            <p class="card-text saldo-conta">R$ 740.000,00</p>
+                            <p class="card-text saldo-conta">R$ {{balance}}</p>
                             <h4 class="card-subtitle"></h4>
                         </div>
                     </div>
@@ -52,7 +52,15 @@
                 <div class="col-md-7"> 
                     <div class="card extrato">
                         <div class="card-body">
-                            <h4 class="card-subtitle">Extrato</h4> <historico de transações
+                            <h4 class="card-subtitle">Extrato</h4>
+                            <h6>Extratos pagos</h6>
+                            {% for extrato in transactions%}
+                            <div class="alert alert-dark extrato-list">
+                                <p class="form-control">R$ {{extrato.value}}</p>
+                                <p class="form-control">{{extrato.date}}</p>
+                                <p class="form-control">{{extrato.categories}}</p>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -71,35 +79,28 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <select name="" id="cartões" class="form-select">
-                    <option selected>---- ----</option>
-                    <option>cartões</option>
-                    <option>cartões</option>
-                    <option>cartões</option>
-                    <option>cartões</option>
-                </select>
                 <div class="row" style="margin-top: 10px;">
                     <div class="col-md-6">
                         <label>Numero do Cartão</label>
-                        <input type="text" value="xxxx xxxx xxxx xxxx" class="form-control" disabled>
+                        <input type="text" value="{{card.card_number}}" class="form-control" disabled>
                     </div>
                     <div class="col-md-3">
                         <label>Validade</label>
-                        <input type="text" value="mm/yyyy" class="form-control" disabled>
+                        <input type="text" value="{{card.expire_date}}" class="form-control" disabled>
                     </div>
                     <div class="col-md-3">
                         <label>CVV</label>
-                        <input type="text" value="XXX" class="form-control" disabled>
+                        <input type="text" value="{{card.cvv}}" class="form-control" disabled>
                     </div>
                 </div>
                 <div class="row" style="margin-top: 10px;">
                     <div class="col-md-6">
                         <label>Fatura</label>
-                        <input type="text" value="R$ 5.000.000,00" class="form-control" style="width: auto;" disabled>
+                        <input type="text" value="R${{card.bill}}" class="form-control" style="width: auto;" disabled>
                     </div>
                     <div class="col-md-3">
                         <label>Limite</label>
-                        <input type="text" class="form-control" value="R$ 5000,00" style="width: auto;" disabled>
+                        <input type="text" class="form-control" value="R$ {{card.limit}}" style="width: auto;" disabled>
                     </div>
                 </div>
             </div>
@@ -131,11 +132,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Valor da Fatura</label>
-                                <input type="text" class="form-control" value="R$ 00,00" disabled>
+                                <input type="text" class="form-control" value="R$ {{card.bill}}" disabled>
                             </div>
                             
                             <div class="col-md-6" style="margin-top: 15px;">
-                                <form action="POST" style="margin-top: 10px;">
+                                <form method="POST" style="margin-top: 10px;">
                                     <div class="row">
                                         <div class="col-md-5">
                                             <input type="number" class="form-control" name="pagamento">
@@ -150,7 +151,7 @@
                     </div>
 
                     <div id="deposit" style="display:none;">
-                        <form action="POST">
+                        <form method="POST">
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Valor para deposito</label>
@@ -164,7 +165,7 @@
                     </div>
 
                     <div id="transfer" style="display: none;">
-                        <form action="POST">
+                        <form method="POST">
                             <div class="row">
                                 <div class="col-md-4">
                                     <label>Valor</label>
@@ -182,7 +183,7 @@
                     </div>
 
                     <div id="buy" style="display: none;">
-                        <form action="POST">
+                        <form method="POST">
                             <div class="row">
                                 <div class="col-md-7">
                                     <select name="compra" id="" class="form-select">
