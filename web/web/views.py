@@ -139,3 +139,7 @@ def home(request):
             return render(request, "web/index.html", dict(context))
 
     return render(request, "web/home.html")
+
+
+
+

@@ -59,7 +59,9 @@
                                 <div class="alert alert-dark extrato-list" id="{{extrato.id}}">
                                     <p class="form-control">R$ {{extrato.value}}</p>
                                     <p class="form-control">{{extrato.date}}</p>
-                                    <p class="form-control">{{extrato.categories}}</p>
+                                    {% if extrato.categories is not None %}
+                                        <p class="form-control">{{extrato.categories}}</p>
+                                    {% endif %}
                                 </div>
                                 {% endfor %}
                             </div>
@@ -138,7 +140,8 @@
                             </div>
                             
                             <div class="col-md-6" style="margin-top: 15px;">
-                                <form method="POST" style="margin-top: 10px;">
+                                <form method="POST" action="{% url 'web:payment' card.id %}"  style="margin-top: 10px;">
+                                    {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-5">
                                             <input type="number" class="form-control" name="pagamento">
@@ -153,7 +156,7 @@
                     </div>
 
                     <div id="deposit" style="display:none;">
-                        <form method="POST">
+                        <form method="POST" action="{% url 'web:deposit' card.account %}">
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Valor para deposito</label>
