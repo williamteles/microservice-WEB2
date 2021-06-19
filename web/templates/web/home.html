@@ -54,13 +54,15 @@
                         <div class="card-body">
                             <h4 class="card-subtitle">Extrato</h4>
                             <h6>Extratos pagos</h6>
-                            {% for extrato in transactions%}
-                            <div class="alert alert-dark extrato-list">
-                                <p class="form-control">R$ {{extrato.value}}</p>
-                                <p class="form-control">{{extrato.date}}</p>
-                                <p class="form-control">{{extrato.categories}}</p>
+                            <div id="scroll">
+                                {% for extrato in transactions%}
+                                <div class="alert alert-dark extrato-list">
+                                    <p class="form-control">R$ {{extrato.value}}</p>
+                                    <p class="form-control">{{extrato.date}}</p>
+                                    <p class="form-control">{{extrato.categories}}</p>
+                                </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
                         </div>
                     </div>
                 </div>
