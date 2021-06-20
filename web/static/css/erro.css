@@ -1,0 +1,28 @@
+.container {
+    width: 80vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center
+}
+
+.card-error {
+    width: 50%;
+    height: 400px;
+    background:#17bf63;
+}
+
+body {
+    margin: 0px;
+}
+
+.teste{
+    padding: 50px 50px 0px;
+
+}
+
+.messages-erro{
+    font-size: xx-large;
+    color:#242526;
+}
