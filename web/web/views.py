@@ -62,7 +62,7 @@ def register_account(request):
     if request.method == "POST":
         type_account = request.POST.get("type_account")
         # owner_id = request.POST.get("owner_id")
-        owner_id = 6
+        owner_id = 2
         balance = 0
         
         for i in range(MAX_TRIES):
@@ -104,7 +104,7 @@ def register_account(request):
                     card = create_card(body)
 
                     if "has_error" not in card:
-                        return redirect('web:home')
+                        return redirect('web:login')
 
                     elif i == MAX_TRIES - 1:
                         print(card)
@@ -131,7 +131,7 @@ def register_account(request):
 def home(request):
     if request.method == "GET":
         # owner_id = request.POST.get("owner_id")
-        owner_id = 5
+        owner_id = 1
         
         api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
         payload = api_response_user.json()
@@ -202,7 +202,7 @@ def payment(request, account_id):
 
                 balance_update = update_account_balance(account_id, final_balance)
                         
-                if "nas_error" not in balance_update:
+                if "has_error" not in balance_update:
                     response_transaction = create_transaction(transaction_body)
 
                     if "has_error" not in response_transaction:
@@ -286,7 +286,7 @@ def transfer(request, account_id):
 
             if final_balance < 0:
                 context = {"has_error": True, "error_message": "Saldo Insuficiente"}
-                return render(request, 'web/home.html', dict(context))
+                return render(request, 'error/erro.html', dict(context))
             
             else:
                 balance_transfer =  float(account_transfer["balance"])
@@ -321,3 +321,7 @@ def transfer(request, account_id):
         print('a')
     
     return render(request, "web/home.html")
+
+
+def error(request):
+    return render(request, 'error/erro.html')
