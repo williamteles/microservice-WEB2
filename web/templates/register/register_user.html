@@ -16,8 +16,10 @@
         
         <form method="post">
             {% csrf_token %}
-            <input type="text" class="form-control" name="username" placeholder="Nome de Usuário" required autofocus>
+            <input type="text" class="form-control" name="username" placeholder="Nome Completo" required autofocus>
             
+            <input type="text" class="form-control" name="cpf" placeholder="CPF" required>
+
             <input type="email" class="form-control" name="email" placeholder="E-mail" required autofocus>
             
             <input type="password" class="form-control" name="password1" placeholder="Senha" required>
