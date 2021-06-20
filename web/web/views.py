@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .utils import create_transaction, get_account_from_owner, get_card_from_account, get_transactions_from_account, rand_N_digits
+from .utils import create_account, create_card, create_transaction, delete_account, get_account_by_account_number, get_account_by_id, get_account_from_owner, get_card_from_account, get_transactions_from_account, rand_N_digits, update_account_balance, update_card_bill
 import requests
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
@@ -62,60 +62,76 @@ def register_account(request):
     if request.method == "POST":
         type_account = request.POST.get("type_account")
         # owner_id = request.POST.get("owner_id")
-        owner_id = 1
+        owner_id = 6
         balance = 0
         
         for i in range(MAX_TRIES):
             account_number = str(rand_N_digits(10))
-
-            body = {"owner_id": owner_id, "account_number": account_number,
-                    "balance": balance, "type_account": type_account }
+            body = {
+                "owner_id": owner_id,
+                "account_number": account_number,
+                "balance": balance,
+                "type_account": type_account
+                }
             
-            api_response = requests.post("http://account-api:8000/acct/account/", json=body)
-            payload = api_response.json()
+            account = create_account(body)
 
-            if api_response.status_code == 201:
-                break
+            if "has_error" not in account:
+                account_id = account["id"]
+                prefix_card_number = "3897 2468"
+                password = request.POST.get("card_password")
+                expire_date = str(date.today() + relativedelta(years=10))
+                cvv = str(rand_N_digits(3))
+                has_credit = True if type_account == "corrente" else False
+                bill = 0
+                limit = 1200
+
+                for i in range(MAX_TRIES):
+                    card_number_part1 = " " + str(rand_N_digits(4))
+                    card_number_part2 = " " + str(rand_N_digits(4))
+                    card_number = prefix_card_number + card_number_part1 + card_number_part2
+                    body = {
+                        "card_number": card_number,
+                        "expire_date": expire_date,
+                        "cvv": cvv,
+                        "password": password,
+                        "has_credit": has_credit,
+                        "bill": bill,
+                        "limit": limit,
+                        "account": account_id
+                        }
+                    
+                    card = create_card(body)
+
+                    if "has_error" not in card:
+                        return redirect('web:home')
+
+                    elif i == MAX_TRIES - 1:
+                        print(card)
+                        response_delete_account = delete_account(account_id)
+                        response_delete_account["error_message"] = "Não foi possível criar a conta"
+                        return render(request, 'register/register_account.html', dict(response_delete_account))
+                        
+                    else:
+                        print(card)
+                        continue
+
             elif i == MAX_TRIES - 1:
-                context = {"has_error": True, "error_message": payload["message"]}
+                print(account)
+                context = {"has_error": True, "error_message": "Não foi possível criar a conta"}
                 return render(request, 'register/register_account.html', dict(context))
+
+            else:
+                print(account)
+                continue
                 
-        
-        account_id = payload["id"]
-        prefix_card_number = "3897 2468"
-        password = request.POST.get("card_password")
-        # password = 2531
-        expire_date = str(date.today() + relativedelta(years=10))
-        cvv = str(rand_N_digits(3))
-        has_credit = True if type_account == "corrente" else False
-        bill = 0
-        limit = 1200
-        for i in range(MAX_TRIES):
-            card_number_part1 = " " + str(rand_N_digits(4))
-            card_number_part2 = " " + str(rand_N_digits(4))
-            card_number = prefix_card_number + card_number_part1 + card_number_part2
-
-            body = {"card_number": card_number, "expire_date": expire_date,
-                    "cvv": cvv, "password": password, "has_credit": has_credit,
-                    "bill": bill, "limit": limit, "account": account_id}
-
-            api_response = requests.post("http://account-api:8000/acct/card/", json=body)
-            payload = api_response.json()
-            if api_response.status_code == 201:
-                break
-            elif i == MAX_TRIES - 1:
-                context = {"has_error": True, "error_message": payload["message"]}
-                return render(request, 'register/register_account.html', dict(context))
-
-        return redirect('web:home')
-
     return render(request,'register/register_account.html',{})
 
 
 def home(request):
     if request.method == "GET":
         # owner_id = request.POST.get("owner_id")
-        owner_id = 2
+        owner_id = 5
         
         api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
         payload = api_response_user.json()
@@ -140,7 +156,7 @@ def home(request):
     return render(request, "web/home.html")
 
 
-def payment(request, card_id, account_id):
+def payment(request, account_id):
 
     if request.method == "POST":
 
@@ -156,49 +172,152 @@ def payment(request, card_id, account_id):
             "type_transaction": type_transaction,
             "account": account_id
             }
-        
-        api_response = requests.get(f"http://account-api:8000/acct/account/{account_id}")
-        payload = api_response.json()
-        balance = float(payload["balance"])
-        final_balance = balance - payment_value
+        print(account_id)
+        account = get_account_by_id(account_id)
 
-        if final_balance < 0:
-            context = {"has_error": True, "error_message": "Saldo Insuficiente"}
-            return render(request, 'web/home.html', dict(context))
-        else:
-            api_response = requests.get(f"http://account-api:8000/acct/card/{card_id}")
-            payload = api_response.json()
-            final_bill = float(payload["bill"])- payment_value
-                
-            if final_bill < 0:
-                final_balance += abs(final_bill)
+        if "has_error" not in account:
+            balance = float(account["balance"])
+            final_balance = balance - payment_value
 
-                api_response = requests.put(f"http://account-api:8000/acct/cardbill/{card_id}/", json={"bill": 0,"id":card_id})
-                payload = api_response.json()
-                
-                if api_response.status_code not in (200, 204):
-                    context = {"has_error": True, "error_message": payload["message"]}
-                    return render(request, 'web/home.html', dict(context))
+            if final_balance < 0:
+                context = {"has_error": True, "error_message": "Saldo Insuficiente"}
+                return render(request, 'web/home.html', dict(context))
             else:
-                api_response = requests.put(f"http://account-api:8000/acct/cardbill/{card_id}/", json={"bill": final_bill,"id":card_id})
-                payload = api_response.json()
-
-                if api_response.status_code not in (200, 204):
-                    context = {"has_error": True, "error_message": payload["message"]}
-                    return render(request, 'web/home.html', dict(context))
-
-            api_response = requests.put(f"http://account-api:8000/acct/accountbalance/{account_id}/", json={"balance": final_balance,"id":account_id})
-            payload = api_response.json()
+                card = get_card_from_account(account_id)
+                final_bill = float(card["bill"])- payment_value
                     
-            if api_response.status_code in (200, 204):
+                if final_bill < 0:
+                    final_balance += abs(final_bill)
+
+                    bill_update = update_card_bill(card["id"], 0)
+                    
+                    if "has_error" in bill_update:
+                        return render(request, 'web/home.html', dict(bill_update))
+
+                else:
+                    bill_update = update_card_bill(card["id"], final_bill)
+
+                    if "has_error" in bill_update:
+                        return render(request, 'web/home.html', dict(bill_update))
+
+                balance_update = update_account_balance(account_id, final_balance)
+                        
+                if "nas_error" not in balance_update:
+                    response_transaction = create_transaction(transaction_body)
+
+                    if "has_error" not in response_transaction:
+                        return redirect('web:home')
+                    else:
+                        return render(request, 'web/home.html', dict(response_transaction))
+                else:
+                    return render(request, 'web/home.html', dict(balance_update))
+        
+        else:
+            return render(request, 'web/home.html', dict(account))
+
+    return render(request, "web/home.html")
+
+
+def deposit(request, account_id):
+    
+    if request.method == "POST":
+        date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
+        time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
+        deposit_value = float(request.POST.get("deposit_value"))
+        type_transaction = "Depósito"
+
+        transaction_body = {
+            "date": date_transaction,
+            "time": time_transaction,
+            "value": deposit_value,
+            "type_transaction": type_transaction,
+            "account": account_id
+            }
+
+        account = get_account_by_id(account_id)
+
+        if "has_error" not in account:
+            balance = float(account["balance"])
+            final_balance = balance + deposit_value
+
+            update_balance = update_account_balance(account_id, final_balance)
+
+            if "has_error" not in update_balance:
                 response_transaction = create_transaction(transaction_body)
 
                 if "has_error" not in response_transaction:
                     return redirect('web:home')
+                
                 else:
                     return render(request, 'web/home.html', dict(response_transaction))
-            else:
-                context = {"has_error": True, "error_message": payload["message"]}
-                return render(request, 'web/home.html', dict(context))
+        
+        else:
+            return render(request, 'web/home.html', dict(account))
+    
+    return render(request, "web/home.html")
 
+
+def transfer(request, account_id):
+
+    if request.method == "POST":
+
+        date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
+        time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
+        transfer_value = float(request.POST.get("transfer_value"))
+        account_transfer_number = request.POST.get("account_transfer_number")
+        type_transaction = "Transferência"
+
+        account = get_account_by_id(account_id)
+
+        account_transfer = get_account_by_account_number(account_transfer_number)
+
+        if ("has_error" not in account) and ("has_error" not in account_transfer):
+            transaction_body = {
+                "date": date_transaction,
+                "time": time_transaction,
+                "value": transfer_value,
+                "type_transaction": type_transaction,
+                "transfer_account": account_transfer["id"],
+                "account": account_id
+                }
+
+            balance = float(account["balance"])
+            final_balance = balance - transfer_value
+
+            if final_balance < 0:
+                context = {"has_error": True, "error_message": "Saldo Insuficiente"}
+                return render(request, 'web/home.html', dict(context))
+            
+            else:
+                balance_transfer =  float(account_transfer["balance"])
+                final_balance_transfer = balance_transfer + transfer_value
+                
+                update_balance = update_account_balance(account_id, final_balance)
+                if "has_error" not in update_balance:
+                    update_transfer_account_balance = update_account_balance(account_transfer["id"], final_balance_transfer)
+                
+                    if "has_error" not in update_transfer_account_balance:
+                        response_transaction = create_transaction(transaction_body)
+
+                        if "has_error" not in response_transaction:
+                            return redirect('web:home')
+    
+                        else:
+                            return render(request, 'web/home.html', dict(response_transaction))
+                    
+                    else:
+                        return render(request, 'web/home.html', dict(update_transfer_account_balance))
+                
+                else:
+                    return render(request, 'web/home.html', dict(update_balance))
+
+        elif "has_error" not in account:
+            return render(request, 'web/home.html', dict(account_transfer))
+        else:
+            return render(request, 'web/home.html', dict(account))
+
+    if request.method == "GET":
+
+        print('a')
+    
     return render(request, "web/home.html")
