@@ -1,5 +1,5 @@
 from .models import Account, Card, Transactions
-from .serializers import AccountSerializer, AccountTypeSerializer, CardSerializer, TransactionsSerializer, TransactionsTypeSerializer
+from .serializers import AccountSerializer, CardSerializer, TransactionsSerializer
 from django.http import Http404
 from rest_framework import status
 from rest_framework import mixins
@@ -97,16 +97,6 @@ class AccountList(mixins.ListModelMixin,
             response = Response({"message": error_message}, status=e.status_code)
 
         return response
-
-
-class AccountTypeReader(mixins.RetrieveModelMixin,
-    generics.GenericAPIView):
-
-    queryset= Account.objects.all()
-    serializer_class = AccountTypeSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
 
 class CardDetail(mixins.RetrieveModelMixin,
@@ -225,13 +215,3 @@ class TransactionsList(mixins.ListModelMixin,
             response = Response({"message": error_message}, status=e.status_code)
 
         return response
-
-
-class TransactionsTypeReader(mixins.ListModelMixin,
-    generics.GenericAPIView):
-
-    queryset= Transactions.objects.all()
-    serializer_class = TransactionsTypeSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)

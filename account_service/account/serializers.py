@@ -8,18 +8,6 @@ class AccountSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class AccountTypeSerializer(ModelSerializer): 
-    class Meta:
-        model = Account
-        fields = ['id', 'type_account']
-
-
-class AccountSimpleSerializer(ModelSerializer):
-    class Meta:
-        model = Account
-        fields = '__all__'
-
-
 class CardSerializer(ModelSerializer):
     class Meta:
         model = Card
@@ -30,9 +18,3 @@ class TransactionsSerializer(ModelSerializer):
     class Meta:
         model = Transactions
         fields = '__all__'
-
-
-class TransactionsTypeSerializer(ModelSerializer):
-    class Meta:
-        model = Transactions
-        fields = ['id', 'type_transaction']
