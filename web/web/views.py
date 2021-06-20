@@ -107,22 +107,18 @@ def register_account(request):
                         return redirect('web:login')
 
                     elif i == MAX_TRIES - 1:
-                        print(card)
                         response_delete_account = delete_account(account_id)
                         response_delete_account["error_message"] = "Não foi possível criar a conta"
                         return render(request, 'register/register_account.html', dict(response_delete_account))
                         
                     else:
-                        print(card)
                         continue
 
             elif i == MAX_TRIES - 1:
-                print(account)
                 context = {"has_error": True, "error_message": "Não foi possível criar a conta"}
                 return render(request, 'register/register_account.html', dict(context))
 
             else:
-                print(account)
                 continue
                 
     return render(request,'register/register_account.html',{})
@@ -172,7 +168,7 @@ def payment(request, account_id):
             "type_transaction": type_transaction,
             "account": account_id
             }
-        print(account_id)
+        
         account = get_account_by_id(account_id)
 
         if "has_error" not in account:
@@ -315,10 +311,6 @@ def transfer(request, account_id):
             return render(request, 'error/erro.html', dict(account_transfer))
         else:
             return render(request, 'error/erro.html', dict(account))
-
-    if request.method == "GET":
-
-        print('a')
     
     return render(request, "web/home.html")
 

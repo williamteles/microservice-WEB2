@@ -124,13 +124,9 @@ def get_card_from_account(account_id):
 
 def update_card_bill(card_id, final_bill):
     body = {"id": card_id, "bill": final_bill}
-    print(body)
     api_response = requests.put(f"http://account-api:8000/acct/cardbill/{card_id}", json=body)
-    print(api_response)
-    print(api_response.status_code)
     payload = api_response.json()
-    print(payload)
-    
+
     if api_response.status_code not in (200, 204):
         error = {"has_error": True, "error_message": "Atualização de fatura não sucedida"}
         return error
