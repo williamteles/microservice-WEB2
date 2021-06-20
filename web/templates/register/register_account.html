@@ -14,7 +14,7 @@
         
         <h1 class="h3 mb-3 fw-normal">Cadastro da FiboConta</h1>
 
-        <form method="post">
+        <form method="POST">
 
             {% csrf_token %}
             
@@ -25,12 +25,15 @@
                 <option value="salario">Conta Salario</option>
             </select>
             
-            <input type="number" class="form-select" placeholder="Crie uma senha de 4 digitos" required>
+            <input type="password" class="form-select" placeholder="Crie uma senha de 4 digitos" name="card_password" required>
 
             <button type="submit" class="btn btn-lg btn-success">Criar conta</button>
             
         </form>
         
+        {% if has_error %}
+            <p class="messages" >{{error_message}}</p>
+        {% endif %}
     </main>
     
 </div>
