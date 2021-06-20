@@ -61,6 +61,8 @@
                                     <p class="form-control">{{extrato.date}}</p>
                                     {% if extrato.categories is not None %}
                                         <p class="form-control">{{extrato.categories}}</p>
+                                    {% else %}
+                                        <p class="form-control">{{extrato.type_transcation}}</p>
                                     {% endif %}
                                 </div>
                                 {% endfor %}
@@ -140,7 +142,7 @@
                             </div>
                             
                             <div class="col-md-6" style="margin-top: 15px;">
-                                <form method="POST" action="{% url 'web:payment' card.id %}"  style="margin-top: 10px;">
+                                <form method="POST" action="{% url 'web:payment' card.id, card.account%}"  style="margin-top: 10px;">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-5">
