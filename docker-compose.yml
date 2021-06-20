@@ -4,6 +4,7 @@ services:
     nginx:
         container_name: nginx
         build: nginx
+        image: nginx:latest
         ports: 
             - 80:80
         volumes:
@@ -16,7 +17,8 @@ services:
         build: 
             context: ./web
             dockerfile: Dockerfile
-        command: bash -c "python manage.py runserver 0.0.0.0:8080"
+        image: web:latest
+        command: bash -c "sleep 100 && python manage.py runserver 0.0.0.0:8080"
         ports: 
             - 8080:8000
         volumes: 
@@ -30,8 +32,8 @@ services:
         build:
             context: ./account_service
             dockerfile: Dockerfile
-        command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-        restart: on-failure
+        image: account-api:latest
+        command: bash -c "sleep 90 && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
         volumes:
             - ./account_service:/app
         depends_on:
@@ -54,8 +56,8 @@ services:
         build:
             context: ./authentication_service
             dockerfile: Dockerfile
-        command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-        restart: on-failure
+        image: auth-api:latest
+        command: bash -c "sleep 90 && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
         volumes:
             - ./authentication_service:/app
         depends_on: 
