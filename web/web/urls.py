@@ -10,7 +10,7 @@ urlpatterns = [
     path('register/user/',views.register_user,name='register_user'),
     path('register/account/',views.register_account,name='register_account'),
     path('home',views.home,name='home'),
-    path('payment/<int:card_id>',views.payment,name='payment'),
-    path('deposit/<int:account_id>',views.deposit,name='deposit'),
-    path('transfer/',views.transfer,name='transfer'),
-]
+#     path('payment/<int:card_id>',views.payment,name='payment'),
+#     path('deposit/<int:account_id>',views.deposit,name='deposit'),
+#     path('transfer/',views.transfer,name='transfer'),
+ ]
