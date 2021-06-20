@@ -115,7 +115,7 @@ def register_account(request):
 def home(request):
     if request.method == "GET":
         # owner_id = request.POST.get("owner_id")
-        owner_id = 1
+        owner_id = 2
         
         api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
         payload = api_response_user.json()
@@ -128,7 +128,7 @@ def home(request):
 
                 transactions_account = get_transactions_from_account(account["id"])
 
-                context = {"username": payload["username"], "account": account, "card": account_card, "transactions": transactions_account}
+                context = {"username": payload["username"], "account": account, "card": account_card, "transactions": list(reversed(transactions_account))}
                 return render(request, 'web/home.html', dict(context))
             else:
                 context = account
