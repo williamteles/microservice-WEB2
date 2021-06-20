@@ -3,9 +3,9 @@ from django.db import models
 
 class Account(models.Model):
     TYPE = (
-        ('Conta Poupança', 'Conta Poupança'),
-        ('Conta Corrente', 'Conta Corrente'),
-        ('Conta Salário', 'Conta Salário')
+        ('poupanca', 'Conta Poupança'),
+        ('corrente', 'Conta Corrente'),
+        ('salario', 'Conta Salário')
     )
 
     account_number = models.CharField(max_length=10, unique=True)
