@@ -13,5 +13,6 @@ urlpatterns = [
     path(r'home/payment/<int:account_id>', views.payment, name='payment'),
     path(r'home/deposit/<int:account_id>', views.deposit, name='deposit'),
     path(r'home/transfer/<int:account_id>', views.transfer, name='transfer'),
+    path(r'home/buy/<int:account_id>', views.buy, name='buy'),
     path(r'error/',views.error,name='error'),
  ]
