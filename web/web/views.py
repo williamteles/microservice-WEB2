@@ -323,5 +323,97 @@ def transfer(request, account_id):
     return render(request, "web/home.html")
 
 
+def buy(request, account_id):
+    
+    if request.method == "POST":
+        payment_type = request.POST.get("payment_type")
+        buy_value = float(request.POST.get("buy_value"))
+        categories = request.POST.get("buy_type")
+        date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
+        time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
+        type_transaction = "Compra"
+
+        account = get_account_by_id(account_id)
+
+        if "has_error" not in account:
+            
+            if payment_type == "Débito":
+                transaction_body = {
+                        "date": date_transaction,
+                        "time": time_transaction,
+                        "value": buy_value,
+                        "categories": categories,
+                        "type_transaction": type_transaction,
+                        "payment_type": payment_type,
+                        "account": account_id
+                        }
+                
+                balance = float(account["balance"])
+                final_balance = balance - buy_value
+
+                if final_balance < 0:
+                    context = {"has_error": True, "error_message": "Saldo Insuficiente"}
+                    return render(request, 'error/erro.html', dict(context))
+                
+                else:
+                    update_response = update_account_balance(account_id, final_balance)
+
+                    if "has_error" not in update_response:
+                        response_transaction = create_transaction(transaction_body)
+
+                        if "has_error" not in response_transaction:
+                            return redirect('web:home')
+                        else:
+                            return render(request, 'error/erro.html', dict(response_transaction))
+                    
+                    else:
+                        return render(request, 'error/erro.html', dict(update_response))
+            
+            elif payment_type == "Crédito":
+                card = get_card_from_account(account_id)
+
+                if "has_error" not in card:
+
+                    transaction_body = {
+                            "date": date_transaction,
+                            "time": time_transaction,
+                            "value": buy_value,
+                            "categories": categories,
+                            "type_transaction": type_transaction,
+                            "payment_type": payment_type,
+                            "account": account_id,
+                            "card": card["id"]
+                            }
+                    
+                    bill = float(card["bill"])
+                    final_bill = bill + buy_value
+
+                    if final_bill > float(card["limit"]):
+                        context = {"has_error": True, "error_message": "Limite Insuficiente"}
+                        return render(request, 'error/erro.html', dict(context))
+                    
+                    else:
+                        update_response = update_card_bill(card["id"], final_bill)
+
+                        if "has_error" not in update_response:
+                            response_transaction = create_transaction(transaction_body)
+
+                            if "has_error" not in response_transaction:
+                                return redirect('web:home')
+                            else:
+                                return render(request, 'error/erro.html', dict(response_transaction))
+                        
+                        else:
+                            return render(request, 'error/erro.html', dict(update_response))
+
+                else:
+                    return render(request, 'error/erro.html', dict(card))
+
+            else:
+                return render(request, 'error/erro.html', dict(account))
+
+    return render(request, "web/home.html") 
+
+
 def error(request):
     return render(request, 'error/erro.html')
