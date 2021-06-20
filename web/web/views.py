@@ -148,10 +148,10 @@ def home(request):
                 return render(request, 'web/home.html', dict(context))
             else:
                 context = account
-                return render(request, "web/index.html", dict(context))
+                return render(request, "error/erro.html", dict(context))
         else:
             context = {"has_error": True, "error_message": payload["message"]}
-            return render(request, "web/index.html", dict(context))
+            return render(request, "error/erro.html", dict(context))
 
     return render(request, "web/home.html")
 
@@ -181,7 +181,7 @@ def payment(request, account_id):
 
             if final_balance < 0:
                 context = {"has_error": True, "error_message": "Saldo Insuficiente"}
-                return render(request, 'web/home.html', dict(context))
+                return render(request, 'error/erro.html', dict(context))
             else:
                 card = get_card_from_account(account_id)
                 final_bill = float(card["bill"])- payment_value
@@ -192,13 +192,13 @@ def payment(request, account_id):
                     bill_update = update_card_bill(card["id"], 0)
                     
                     if "has_error" in bill_update:
-                        return render(request, 'web/home.html', dict(bill_update))
+                        return render(request, 'error/erro.html', dict(bill_update))
 
                 else:
                     bill_update = update_card_bill(card["id"], final_bill)
 
                     if "has_error" in bill_update:
-                        return render(request, 'web/home.html', dict(bill_update))
+                        return render(request, 'error/erro.html', dict(bill_update))
 
                 balance_update = update_account_balance(account_id, final_balance)
                         
@@ -208,12 +208,12 @@ def payment(request, account_id):
                     if "has_error" not in response_transaction:
                         return redirect('web:home')
                     else:
-                        return render(request, 'web/home.html', dict(response_transaction))
+                        return render(request, 'error/erro.html', dict(response_transaction))
                 else:
-                    return render(request, 'web/home.html', dict(balance_update))
+                    return render(request, 'error/erro.html', dict(balance_update))
         
         else:
-            return render(request, 'web/home.html', dict(account))
+            return render(request, 'error/erro.html', dict(account))
 
     return render(request, "web/home.html")
 
@@ -249,7 +249,7 @@ def deposit(request, account_id):
                     return redirect('web:home')
                 
                 else:
-                    return render(request, 'web/home.html', dict(response_transaction))
+                    return render(request, 'error/erro.html', dict(response_transaction))
         
         else:
             return render(request, 'web/home.html', dict(account))
@@ -303,18 +303,18 @@ def transfer(request, account_id):
                             return redirect('web:home')
     
                         else:
-                            return render(request, 'web/home.html', dict(response_transaction))
+                            return render(request, 'error/erro.html', dict(response_transaction))
                     
                     else:
-                        return render(request, 'web/home.html', dict(update_transfer_account_balance))
+                        return render(request, 'error/erro.html', dict(update_transfer_account_balance))
                 
                 else:
-                    return render(request, 'web/home.html', dict(update_balance))
+                    return render(request, 'error/erro.html', dict(update_balance))
 
         elif "has_error" not in account:
-            return render(request, 'web/home.html', dict(account_transfer))
+            return render(request, 'error/erro.html', dict(account_transfer))
         else:
-            return render(request, 'web/home.html', dict(account))
+            return render(request, 'error/erro.html', dict(account))
 
     if request.method == "GET":
 
