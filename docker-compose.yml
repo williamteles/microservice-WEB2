@@ -31,6 +31,7 @@ services:
             context: ./account_service
             dockerfile: Dockerfile
         command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+        restart: on-failure
         volumes:
             - ./account_service:/app
         depends_on:
@@ -54,6 +55,7 @@ services:
             context: ./authentication_service
             dockerfile: Dockerfile
         command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+        restart: on-failure
         volumes:
             - ./authentication_service:/app
         depends_on: 
