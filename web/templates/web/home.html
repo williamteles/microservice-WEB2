@@ -4,6 +4,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/btn-fibo.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
 {% endblock %}
 
 
@@ -12,6 +13,10 @@
     <div class="row">
 
         <h2 style="color:whitesmoke">Olá, {{username}}.</h2>
+
+        {% if has_error %}
+            <p class="messages" >{{error_message}}</p>
+        {% endif %}
 
         <div class="col-sm-4 col-md-3">
             <div class="card info">
@@ -43,7 +48,7 @@
                     <div class="card saldo"> <!---26.83rem-->
                         <div class="card-body">
                             <h4 class="card-subtitle">Saldo disponivel</h4>
-                            <p class="card-text saldo-conta">R$ {{balance}}</p>
+                            <p class="card-text saldo-conta">R$ {{account.balance}}</p>
                             <h4 class="card-subtitle"></h4>
                         </div>
                     </div>
@@ -142,11 +147,11 @@
                             </div>
                             
                             <div class="col-md-6" style="margin-top: 15px;">
-                                <form method="POST" action="{% url 'web:payment' card.id, card.account%}"  style="margin-top: 10px;">
+                                <form method="POST" action="payment/{{card.id}}/{{account.id}}/"  style="margin-top: 10px;">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-5">
-                                            <input type="number" class="form-control" name="pagamento">
+                                            <input type="number" class="form-control" name="payment_value">
                                         </div>
                                         <div class="col-md-5">
                                             <button class="btn-fibo-1" style="width: 100px;">Pagar</button>
@@ -158,7 +163,7 @@
                     </div>
 
                     <div id="deposit" style="display:none;">
-                        <form method="POST" action="{% url 'web:deposit' card.account %}">
+                        <form method="POST">
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Valor para deposito</label>
@@ -172,7 +177,7 @@
                     </div>
 
                     <div id="transfer" style="display: none;">
-                        <form method="POST" action="{% url 'web:transfer'%}">
+                        <form method="POST">
                             <div class="row">
                                 <div class="col-md-4">
                                     <label>Valor</label>
