@@ -56,7 +56,6 @@ class Transactions(models.Model):
     date = models.DateField(blank=False)
     time = models.TimeField(blank=False)
     value = models.DecimalField(max_digits=18, decimal_places=2)
-    parcelas = models.PositiveIntegerField(default=1)
     categories = models.CharField(max_length=50, choices=CATEGORIES, null=True, blank=True)
     type_transaction = models.CharField(max_length=50, choices=TYPE)
     payment_type = models.CharField(max_length=50, choices=PAYMENT_TYPE, null=True, blank=True)
