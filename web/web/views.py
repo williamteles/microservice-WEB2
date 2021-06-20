@@ -83,8 +83,8 @@ def register_account(request):
         
         account_id = payload["id"]
         prefix_card_number = "3897 2468"
-        # password = request.POST.get("card_password")
-        password = 2531
+        password = request.POST.get("card_password")
+        # password = 2531
         expire_date = str(date.today() + relativedelta(years=10))
         cvv = str(rand_N_digits(3))
         has_credit = True if type_account == "corrente" else False
@@ -144,9 +144,9 @@ def payment(request, card_id, account_id):
 
     if request.method == "POST":
 
-        date_transaction = datetime.strftime(date.today(), '%d/%m/%Y')
+        date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
         time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
-        payment_value = request.POST.get("payment_value")
+        payment_value = float(request.POST.get("payment_value"))
         type_transaction = "Pagamento"
 
         transaction_body = {
@@ -162,40 +162,39 @@ def payment(request, card_id, account_id):
         if "has_error" not in response_transaction:
             api_response = requests.get(f"http://account-api:8000/acct/account/{account_id}")
             payload = api_response.json()
-            
-            balance = payload["balance"]
+            balance = float(payload["balance"])
             final_balance = balance - payment_value
 
             if final_balance < 0:
                 context = {"has_error": True, "error_message": "Saldo Insuficiente"}
                 response = render(request, 'web/home.html', dict(context))
             else:
-                api_response = request.get(f"http://account-api:8000/acct/card/{card_id}/")
+                api_response = requests.get(f"http://account-api:8000/acct/card/{card_id}")
                 payload = api_response.json()
-                final_bill = payload["bill"] - payment_value
+                final_bill = float(payload["bill"])- payment_value
                     
                 if final_bill < 0:
                     final_balance += abs(final_bill)
 
-                    api_response = request.put(f"http://account-api:8000/acct/card/{card_id}/", json={"bill": 0})
+                    api_response = requests.put(f"http://account-api:8000/acct/cardbill/{card_id}/", json={"bill": 0,"id":card_id})
                     payload = api_response.json()
-
+                    
                     if api_response.status_code not in (200, 204):
                         context = {"has_error": True, "error_message": payload["message"]}
                         response = render(request, 'web/home.html', dict(context))
                 else:
-                    api_response = request.put(f"http://account-api:8000/acct/card/{card_id}/", json={"bill": final_bill})
+                    api_response = requests.put(f"http://account-api:8000/acct/cardbill/{card_id}/", json={"bill": final_bill,"id":card_id})
                     payload = api_response.json()
 
                     if api_response.status_code not in (200, 204):
                         context = {"has_error": True, "error_message": payload["message"]}
                         response = render(request, 'web/home.html', dict(context))
 
-                api_response = request.put(f"http://account-api:8000/acct/account/{account_id}/", json={"balance": final_balance})
+                api_response = requests.put(f"http://account-api:8000/acct/accountbalance/{account_id}/", json={"balance": final_balance,"id":account_id})
                 payload = api_response.json()
                         
                 if api_response.status_code in (200, 204):
-                    response = redirect('web/home')
+                    response = redirect('web:home')
                 else:
                     context = {"has_error": True, "error_message": payload["message"]}
                     response = render(request, 'web/home.html', dict(context))
