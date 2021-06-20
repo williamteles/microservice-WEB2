@@ -147,7 +147,7 @@
                             </div>
                             
                             <div class="col-md-6" style="margin-top: 15px;">
-                                <form method="POST" action="payment/{{account.id}}/"  style="margin-top: 10px;">
+                                <form method="POST" action="{% url 'web:payment' account.id %}"  style="margin-top: 10px;">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-5">
@@ -163,11 +163,12 @@
                     </div>
 
                     <div id="deposit" style="display:none;">
-                        <form method="POST">
+                        <form method="POST" action="{% url 'web:deposit' account.id %}">
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Valor para deposito</label>
-                                    <input type="number" class="form-control" name="deposito">
+                                    <input type="number" class="form-control" name="deposit_value">
                                 </div>
                                 <div class="col-md-6" style="margin-top: 15px;">
                                     <button class="btn-fibo-1" style="width: 100px;">Depositar</button>
@@ -177,15 +178,16 @@
                     </div>
 
                     <div id="transfer" style="display: none;">
-                        <form method="POST">
+                        <form method="POST" action="{% url 'web:transfer' account.id %}">
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-4">
                                     <label>Valor</label>
-                                    <input type="number" class="form-control" name="valor">
+                                    <input type="number" class="form-control" name="transfer_value">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Conta</label>
-                                    <input type="text" name="conta" class="form-control">
+                                    <input type="text" name="account_transfer_number" class="form-control">
                                 </div>
                                 <div class="col-md-4" style="margin-top: 15px;"> 
                                     <button class="btn-fibo-1" style="width: 100px;">Transferir</button>
@@ -224,7 +226,6 @@
                     </div>
 
                 </div>
-
             </div>
           </div>
         </div>
