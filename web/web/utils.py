@@ -54,7 +54,9 @@ def get_transactions_from_account(account_id):
         
         for transaction in transactions:
             if transaction["account"] == account_id:
-
+                date_obj = datetime.strptime(transaction["date"], '%Y-%m-%d')
+                date = datetime.strftime(expire_date_obj, '%d/%m/%Y')
+                transaction["date"] = date
                 account_transactions.append(transaction)
         
         return account_transactions
