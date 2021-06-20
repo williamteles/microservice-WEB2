@@ -3,13 +3,13 @@ from django.db import models
 
 class Account(models.Model):
     TYPE = (
-        ('poupanca', 'Conta Poupança'),
-        ('corrente', 'Conta Corrente'),
-        ('salario', 'Conta Salário')
+        ('Conta Poupança', 'Conta Poupança'),
+        ('Conta Corrente', 'Conta Corrente'),
+        ('Conta Salário', 'Conta Salário')
     )
 
     account_number = models.CharField(max_length=10, unique=True)
-    balance = models.DecimalField(max_digits=18, decimal_places=10)
+    balance = models.DecimalField(max_digits=18, decimal_places=2)
     owner_id = models.IntegerField(unique=True)
     type_account = models.CharField(max_length=50, choices=TYPE)
 
@@ -22,35 +22,43 @@ class Card(models.Model):
     has_debit = models.BooleanField(default=True)
     has_credit = models.BooleanField(default=False)
     is_blocked = models.BooleanField(default=False)
-    bill = models.DecimalField(max_digits=18, decimal_places=10)
-    limit = models.DecimalField(max_digits=18, decimal_places=10)
+    bill = models.DecimalField(max_digits=18, decimal_places=2)
+    limit = models.DecimalField(max_digits=18, decimal_places=2)
     account = models.ForeignKey(Account, on_delete=models.PROTECT)
 
    
 class Transactions(models.Model):
     CATEGORIES = (
-        ('restaurante', 'Restaurante'),
-        ('transporte', 'Transporte'),
-        ('servicos', 'Serviços'),
-        ('supermercado', 'Supermercado'),
-        ('lazer', 'Lazer'),
-        ('educacao', 'Educação'),
-        ('eletronicos', 'Eletrônicos'),
-        ('saude', 'Saúde'),
-        ('casa', 'Casa'),
-        ('outros', 'Outros')
+        ('Restaurante', 'Restaurante'),
+        ('Transporte', 'Transporte'),
+        ('Serviços', 'Serviços'),
+        ('Supermercado', 'Supermercado'),
+        ('Lazer', 'Lazer'),
+        ('Educação', 'Educação'),
+        ('Eletrônicos', 'Eletrônicos'),
+        ('Saúde', 'Saúde'),
+        ('Casa', 'Casa'),
+        ('Outros', 'Outros')
     )
 
     TYPE = (
-        ('deposito', 'Depósito'),
-        ('pagamento', 'Pagamento'),
-        ('transferencia', 'Transferencia'),
-        ('compra', 'Compra')
+        ('Depósito', 'Depósito'),
+        ('Pagamento', 'Pagamento'),
+        ('Transferencia', 'Transferencia'),
+        ('Compra', 'Compra')
     )
 
-    date = models.DateTimeField(blank=False)
-    value = models.DecimalField(max_digits=18, decimal_places=10)
-    parcelas = models.PositiveIntegerField()
-    categories = models.CharField(max_length=50, choices=CATEGORIES)
+    PAYMENT_TYPE = (
+        ('Débito', 'Débito'),
+        ('Crédito', 'Crédito')
+    )
+
+    date = models.DateField(blank=False)
+    time = models.TimeField(blank=False)
+    value = models.DecimalField(max_digits=18, decimal_places=2)
+    parcelas = models.PositiveIntegerField(default=1)
+    categories = models.CharField(max_length=50, choices=CATEGORIES, null=True, blank=True)
     type_transaction = models.CharField(max_length=50, choices=TYPE)
-    card = models.ForeignKey(Card, on_delete=models.PROTECT)
+    payment_type = models.CharField(max_length=50, choices=PAYMENT_TYPE, null=True, blank=True)
+    account = models.ForeignKey(Account, on_delete=models.PROTECT)
+    card = models.ForeignKey(Card, on_delete=models.PROTECT, null=True, blank=True)
