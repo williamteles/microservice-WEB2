@@ -24,7 +24,7 @@ class Card(models.Model):
     is_blocked = models.BooleanField(default=False)
     bill = models.DecimalField(max_digits=18, decimal_places=2)
     limit = models.DecimalField(max_digits=18, decimal_places=2)
-    account = models.ForeignKey(Account, on_delete=models.PROTECT)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
    
 class Transactions(models.Model):
@@ -44,7 +44,7 @@ class Transactions(models.Model):
     TYPE = (
         ('Depósito', 'Depósito'),
         ('Pagamento', 'Pagamento'),
-        ('Transferencia', 'Transferencia'),
+        ('Transferência', 'Transferência'),
         ('Compra', 'Compra')
     )
 
@@ -60,5 +60,6 @@ class Transactions(models.Model):
     categories = models.CharField(max_length=50, choices=CATEGORIES, null=True, blank=True)
     type_transaction = models.CharField(max_length=50, choices=TYPE)
     payment_type = models.CharField(max_length=50, choices=PAYMENT_TYPE, null=True, blank=True)
-    account = models.ForeignKey(Account, on_delete=models.PROTECT)
-    card = models.ForeignKey(Card, on_delete=models.PROTECT, null=True, blank=True)
+    transfer_account = models.PositiveIntegerField(null=True, blank=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, null=True, blank=True)
