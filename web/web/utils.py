@@ -27,7 +27,7 @@ def get_account_from_owner(owner_id):
 
     if response.status_code == 200:
         if len(accounts) == 0:
-            return accounts
+            return {}
 
         for account in accounts:
             if account["owner_id"] == owner_id:
