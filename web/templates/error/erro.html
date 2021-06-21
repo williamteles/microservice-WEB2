@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block css-files %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/btn-fibo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/erro.css' %}">
+{% endblock %}
+
+
+{% block content%}
+    <div class="container">
+        <div class="card-error">
+            <div class="teste">
+                {% if has_error %}
+                    <h2 class="messages-erro">{{error_message}}</h2>
+                {% endif %}
+                    <br>
+                    <br>
+                    <a href="{%url 'web:home' %}" class="btn-fibo-2">Voltar para a Home</a>
+                </div>
+        </div>
+    </div>
+{% endblock%}

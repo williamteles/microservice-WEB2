@@ -104,6 +104,7 @@
                         <input type="text" value="{{card.cvv}}" class="form-control" disabled>
                     </div>
                 </div>
+                {% if account.type_account == 'corrente' %}
                 <div class="row" style="margin-top: 10px;">
                     <div class="col-md-6">
                         <label>Fatura</label>
@@ -114,9 +115,7 @@
                         <input type="text" class="form-control" value="R$ {{card.limit}}" style="width: auto;" disabled>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bloquear</button>
+                {% endif %}
             </div>
           </div>
         </div>
@@ -132,13 +131,16 @@
             <div class="modal-body" id="transition-div">
                 <select name="" id="transacao" class="form-select">
                     <option selected>---- ----</option>
-                    <option value="pagamento">Pagamento</option>
+                    {% if account.type_account == 'corrente' %}
+                        <option value="pagamento">Pagamento</option>
+                    {% endif %}
                     <option value="deposito">Deposito</option>
                     <option value="transferencias">Transferencias</option>
                     <option value="compra">Compra</option>
                 </select>
                 <div style="margin-top: 10px;" id="transition-div-row">
-
+                    
+                    {% if account.type_account == 'corrente'%}
                     <div id="payment" style="display:none;">
                         <div class="row">
                             <div class="col-md-6">
@@ -147,7 +149,7 @@
                             </div>
                             
                             <div class="col-md-6" style="margin-top: 15px;">
-                                <form method="POST" action="payment/{{card.id}}/{{account.id}}/"  style="margin-top: 10px;">
+                                <form method="POST" action="{% url 'web:payment' account.id %}"  style="margin-top: 10px;">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-5">
@@ -161,13 +163,15 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
 
                     <div id="deposit" style="display:none;">
-                        <form method="POST">
+                        <form method="POST" action="{% url 'web:deposit' account.id %}">
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Valor para deposito</label>
-                                    <input type="number" class="form-control" name="deposito">
+                                    <input type="number" class="form-control" name="deposit_value">
                                 </div>
                                 <div class="col-md-6" style="margin-top: 15px;">
                                     <button class="btn-fibo-1" style="width: 100px;">Depositar</button>
@@ -177,15 +181,16 @@
                     </div>
 
                     <div id="transfer" style="display: none;">
-                        <form method="POST">
+                        <form method="POST" action="{% url 'web:transfer' account.id %}">
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-4">
                                     <label>Valor</label>
-                                    <input type="number" class="form-control" name="valor">
+                                    <input type="number" class="form-control" name="transfer_value">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Conta</label>
-                                    <input type="text" name="conta" class="form-control">
+                                    <input type="text" name="account_transfer_number" class="form-control">
                                 </div>
                                 <div class="col-md-4" style="margin-top: 15px;"> 
                                     <button class="btn-fibo-1" style="width: 100px;">Transferir</button>
@@ -193,29 +198,43 @@
                             </div>
                         </form>
                     </div>
-
+                    
                     <div id="buy" style="display: none;">
-                        <form method="POST">
+                        <form method="POST" action="{% url 'web:buy' account.id %}">
+                            {% csrf_token %}
                             <div class="row">
-                                <div class="col-md-7">
-                                    <select name="compra" id="" class="form-select">
+                                <div class="col-md-6">
+                                    <select name="buy_type" id="" class="form-select">
                                         <option selected>---- ----</option>
-                                        <option value="restaurante">Restaurante</option>
-                                        <option value="transporte">Transporte</option>
-                                        <option value="servicos">Serviços</option>
-                                        <option value="supermercado">Supermercado</option>
-                                        <option value="lazer">Lazer</option>
-                                        <option value="educacao">Educação</option>
-                                        <option value="eletronicos">Eletronicos</option>
-                                        <option value="saude">Saúde</option>
-                                        <option value="casa">Casa</option>
-                                        <option value="outros">Outros</option>
+                                        <option value="Restaurante">Restaurante</option>
+                                        <option value="Transporte">Transporte</option>
+                                        <option value="Serviços">Serviços</option>
+                                        <option value="Supermercado">Supermercado</option>
+                                        <option value="Lazer">Lazer</option>
+                                        <option value="Educação">Educação</option>
+                                        <option value="Eletrônicos">Eletronicos</option>
+                                        <option value="Saúde">Saúde</option>
+                                        <option value="Casa">Casa</option>
+                                        <option value="Outros">Outros</option>
                                     </select>
                                 </div>
 
-                                <div class="col-md-5">
-                                    <input type="number" name="valor" class="form-control">
+                                <div class="col-md-3">
+                                    {% if account.type_account == 'corrente'%}
+                                        <select name="payment_type" class="form-select">
+                                            <option selected>---- ---</option>
+                                            <option value="Débito">Débito</option>
+                                            <option value="Crédito">Crédito</option>
+                                        </select>
+                                        {% else %}
+                                            <input type="text" value="Débito" name="payment_type" disabled class="form-control">
+                                        {% endif %}
                                 </div>
+
+                                <div class="col-md-3">
+                                    <input type="number" name="buy_value" class="form-control">
+                                </div>
+
                             </div>
                             <div class="row" style="margin-top: 10px;">
                                 <button class="btn-fibo-1" >Comprar</button>
@@ -224,7 +243,6 @@
                     </div>
 
                 </div>
-
             </div>
           </div>
         </div>
