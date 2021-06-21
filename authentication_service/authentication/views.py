@@ -34,8 +34,8 @@ class LoginView(APIView):
         user.save()
 
         tokens = self.generate_tokens(user)
-
-        return Response(tokens, status=status.HTTP_200_OK)
+        
+        return Response({"user_id": user.id, "tokens": tokens}, status=status.HTTP_200_OK)
 
 
     def generate_tokens(self, user):

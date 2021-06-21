@@ -21,13 +21,12 @@ def login(request):
         payload = api_response.json()
 
         if api_response.status_code == 200:
+            request.session["jwt-access"] = payload["tokens"]["access"]
+            request.session["jwt-refresh"] = payload["tokens"]["refresh"]
+            request.session["user_id"] = payload["user_id"]
             response = redirect("/home")
-            response.set_cookie("jwt-access", payload["access"])
-            response.set_cookie("jwt-refresh", payload["refresh"])
-        # adiciona aqui a chamada pra pegar as informações da conta
         else:
             context = {"has_error": True, "error_message": payload["message"]}
-            
             response = render(request, 'register/login.html', dict(context))
 
         return response
@@ -47,6 +46,7 @@ def register_user(request):
         payload = api_response.json()
 
         if api_response.status_code == 201:
+            request.session["user_id"] = payload["id"]
             response = redirect("/register/account")
         else:
             context = {"has_error": True, "error_message": payload["message"]}
@@ -61,8 +61,7 @@ def register_account(request):
 
     if request.method == "POST":
         type_account = request.POST.get("type_account")
-        # owner_id = request.POST.get("owner_id")
-        owner_id = 1
+        owner_id = request.session["user_id"]
         balance = 0
         
         for i in range(MAX_TRIES):
@@ -114,8 +113,7 @@ def register_account(request):
 
 def home(request):
     if request.method == "GET":
-        # owner_id = request.POST.get("owner_id")
-        owner_id = 2
+        owner_id = request.session["user_id"]
         
         api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
         payload = api_response_user.json()
