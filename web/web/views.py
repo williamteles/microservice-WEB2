@@ -402,7 +402,8 @@ def buy(request, account_id):
                     return render(request, 'error/erro.html', dict(card))
 
             else:
-                return render(request, 'error/erro.html', dict(account))
+                context = {"has_error": True, "error_message": "Opção de pagamento inválida"}
+                return render(request, 'error/erro.html', dict(context))
 
     return render(request, "web/home.html") 
 
