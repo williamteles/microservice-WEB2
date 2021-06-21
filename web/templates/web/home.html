@@ -104,7 +104,7 @@
                         <input type="text" value="{{card.cvv}}" class="form-control" disabled>
                     </div>
                 </div>
-                {% if account.type_account == 'corrente' %}
+                {% if account.type_account == 'Corrente' %}
                 <div class="row" style="margin-top: 10px;">
                     <div class="col-md-6">
                         <label>Fatura</label>
@@ -131,7 +131,7 @@
             <div class="modal-body" id="transition-div">
                 <select name="" id="transacao" class="form-select">
                     <option selected>---- ----</option>
-                    {% if account.type_account == 'corrente' %}
+                    {% if account.type_account == 'Corrente' %}
                         <option value="pagamento">Pagamento</option>
                     {% endif %}
                     <option value="deposito">Deposito</option>
@@ -140,7 +140,7 @@
                 </select>
                 <div style="margin-top: 10px;" id="transition-div-row">
                     
-                    {% if account.type_account == 'corrente'%}
+                    {% if account.type_account == 'Corrente'%}
                     <div id="payment" style="display:none;">
                         <div class="row">
                             <div class="col-md-6">
@@ -220,7 +220,7 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    {% if account.type_account == 'corrente'%}
+                                    {% if account.type_account == 'Corrente'%}
                                         <select name="payment_type" class="form-select">
                                             <option selected>---- ---</option>
                                             <option value="Débito">Débito</option>
