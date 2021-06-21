@@ -62,7 +62,7 @@ def register_account(request):
     if request.method == "POST":
         type_account = request.POST.get("type_account")
         # owner_id = request.POST.get("owner_id")
-        owner_id = 2
+        owner_id = 1
         balance = 0
         
         for i in range(MAX_TRIES):
