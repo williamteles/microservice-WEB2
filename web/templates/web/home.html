@@ -22,8 +22,8 @@
             <div class="card info">
                 <div class="card-body">
                     <h5 class="card-title">Cartões</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Faturas & Saldos</h6>
-                    <p class="card-text">Avalie seus saldos/creditos dos seus cartões fibo, além de consultar suas faturas.</p>
+                    <h6 class="card-subtitle mb-2 text-muted">Fatura & Limite</h6>
+                    <p class="card-text">Veja seu cartão de crédito da sua fiboconta, além de consultar sua fatura.</p>
                     <button type="button" class="btn-fibo-1" data-bs-toggle="modal" data-bs-target="#cartao">clique aqui</button>
                 </div>
             </div>
@@ -32,8 +32,8 @@
             <div class="card info">
                 <div class="card-body">
                     <h5 class="card-title">Transações</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Depositos & Pagamenos</h6>
-                    <p class="card-text">Realize seus depositos, pagamentos e transferencias de sua fiboconta, além de consultar o credito de emprestimos.</p>
+                    <h6 class="card-subtitle mb-2 text-muted">Depósitos & Pagamentos</h6>
+                    <p class="card-text">Realize depósitos, pagamentos e transferências com sua fiboconta.</p>
                     <button type="button" class="btn-fibo-1" data-bs-toggle="modal" data-bs-target="#transition">clique aqui</button>
                 </div>
             </div>
@@ -134,8 +134,8 @@
                     {% if account.type_account == 'corrente' %}
                         <option value="pagamento">Pagamento</option>
                     {% endif %}
-                    <option value="deposito">Deposito</option>
-                    <option value="transferencias">Transferencias</option>
+                    <option value="deposito">Depósito</option>
+                    <option value="transferencias">Transferências</option>
                     <option value="compra">Compra</option>
                 </select>
                 <div style="margin-top: 10px;" id="transition-div-row">
@@ -170,7 +170,7 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label>Valor para deposito</label>
+                                    <label>Valor para depósito</label>
                                     <input type="number" class="form-control" name="deposit_value">
                                 </div>
                                 <div class="col-md-6" style="margin-top: 15px;">
@@ -227,7 +227,7 @@
                                             <option value="Crédito">Crédito</option>
                                         </select>
                                         {% else %}
-                                            <input type="text" value="Débito" name="payment_type" disabled class="form-control">
+                                            <input type="text" value="Débito" name="payment_type" class="form-control">
                                         {% endif %}
                                 </div>
 
