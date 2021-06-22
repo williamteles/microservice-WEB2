@@ -194,3 +194,16 @@ def delete_transactions(account_id):
     else:
         error = {"has_error": True, "error_message": trasactions["message"]}
         return error
+
+################################################################################################################################
+
+def get_user_by_id(user_id):
+    api_response = requests.get(f"http://auth-api:8000/auth/user/{user_id}")
+    user = api_response.json()
+
+    if api_response.status_code == 200:
+        return user
+    
+    else:
+        error = {"has_error": True, "error_message": user["message"]}
+        return error
