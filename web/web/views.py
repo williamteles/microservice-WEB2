@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .utils import create_account, create_card, create_transaction, delete_account, get_account_by_account_number, get_account_by_id, get_account_from_owner, get_card_from_account, get_transactions_from_account, rand_N_digits, update_account_balance, update_card_bill
+from .utils import *
 import requests
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
@@ -32,6 +32,31 @@ def login(request):
         return response
 
     return render(request, 'register/login.html',{})
+
+
+def change_cardPassword(request, account_id):
+
+    if request.method == "POST":
+        try:
+            owner_id = request.session["user_id"]
+        except:
+            return redirect("web:index")
+
+        user_password = request.POST.get("user_password")
+        card_password = request.POST.get("card_password")
+
+        owner = get_user_by_id(account_id)
+
+        if "has_error" not in owner:
+
+            if user_password != owner["password"]:
+
+                carda = get_card_from_account(account_id)
+
+            print(carda)
+
+
+    return redirect("web:home")
 
 
 def register_user(request):
@@ -125,7 +150,11 @@ def register_account(request):
 
 def home(request):
     if request.method == "GET":
-        owner_id = request.session["user_id"]
+        try:
+            owner_id = request.session["user_id"]
+        except:
+            return redirect("web:index")
+
         
         api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
         payload = api_response_user.json()
@@ -318,6 +347,7 @@ def buy(request, account_id):
     if request.method == "POST":
         payment_type = request.POST.get("payment_type")
         buy_value = float(request.POST.get("buy_value"))
+        card_password = request.POST.get("card_password")
         categories = request.POST.get("buy_type")
         date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
         time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
@@ -327,81 +357,89 @@ def buy(request, account_id):
 
         if "has_error" not in account:
             
-            if payment_type == "Débito":
-                transaction_body = {
-                        "date": date_transaction,
-                        "time": time_transaction,
-                        "value": buy_value,
-                        "categories": categories,
-                        "type_transaction": type_transaction,
-                        "payment_type": payment_type,
-                        "account": account_id
-                        }
+            card = get_card_from_account(account_id)
+
+            if "has_error" not in card:
+
+                if card_password != card["password"]:
                 
-                balance = float(account["balance"])
-                final_balance = balance - buy_value
+                    if payment_type == "Débito":
 
-                if final_balance < 0:
-                    context = {"has_error": True, "error_message": "Saldo Insuficiente"}
-                    return render(request, 'error/erro.html', dict(context))
-                
-                else:
-                    update_response = update_account_balance(account_id, final_balance)
+                        transaction_body = {
+                                "date": date_transaction,
+                                "time": time_transaction,
+                                "value": buy_value,
+                                "categories": categories,
+                                "type_transaction": type_transaction,
+                                "payment_type": payment_type,
+                                "account": account_id
+                                }
+                        
+                        balance = float(account["balance"])
+                        final_balance = balance - buy_value
 
-                    if "has_error" not in update_response:
-                        response_transaction = create_transaction(transaction_body)
-
-                        if "has_error" not in response_transaction:
-                            return redirect('web:home')
-                        else:
-                            return render(request, 'error/erro.html', dict(response_transaction))
-                    
-                    else:
-                        return render(request, 'error/erro.html', dict(update_response))
-            
-            elif payment_type == "Crédito":
-                card = get_card_from_account(account_id)
-
-                if "has_error" not in card:
-
-                    transaction_body = {
-                            "date": date_transaction,
-                            "time": time_transaction,
-                            "value": buy_value,
-                            "categories": categories,
-                            "type_transaction": type_transaction,
-                            "payment_type": payment_type,
-                            "account": account_id,
-                            "card": card["id"]
-                            }
-                    
-                    bill = float(card["bill"])
-                    final_bill = bill + buy_value
-
-                    if final_bill > float(card["limit"]):
-                        context = {"has_error": True, "error_message": "Limite Insuficiente"}
-                        return render(request, 'error/erro.html', dict(context))
-                    
-                    else:
-                        update_response = update_card_bill(card["id"], final_bill)
-
-                        if "has_error" not in update_response:
-                            response_transaction = create_transaction(transaction_body)
-
-                            if "has_error" not in response_transaction:
-                                return redirect('web:home')
-                            else:
-                                return render(request, 'error/erro.html', dict(response_transaction))
+                        if final_balance < 0:
+                            context = {"has_error": True, "error_message": "Saldo Insuficiente"}
+                            return render(request, 'error/erro.html', dict(context))
                         
                         else:
-                            return render(request, 'error/erro.html', dict(update_response))
+                            update_response = update_account_balance(account_id, final_balance)
+
+                            if "has_error" not in update_response:
+                                response_transaction = create_transaction(transaction_body)
+
+                                if "has_error" not in response_transaction:
+                                    return redirect('web:home')
+                                else:
+                                    return render(request, 'error/erro.html', dict(response_transaction))
+                            
+                            else:
+                                return render(request, 'error/erro.html', dict(update_response))
+                    
+                    elif payment_type == "Crédito":
+
+                            transaction_body = {
+                                    "date": date_transaction,
+                                    "time": time_transaction,
+                                    "value": buy_value,
+                                    "categories": categories,
+                                    "type_transaction": type_transaction,
+                                    "payment_type": payment_type,
+                                    "account": account_id,
+                                    "card": card["id"]
+                                    }
+                            
+                            bill = float(card["bill"])
+                            final_bill = bill + buy_value
+
+                            if final_bill > float(card["limit"]):
+                                context = {"has_error": True, "error_message": "Limite Insuficiente"}
+                                return render(request, 'error/erro.html', dict(context))
+                            
+                            else:
+                                update_response = update_card_bill(card["id"], final_bill)
+
+                                if "has_error" not in update_response:
+                                    response_transaction = create_transaction(transaction_body)
+
+                                    if "has_error" not in response_transaction:
+                                        return redirect('web:home')
+                                    else:
+                                        return render(request, 'error/erro.html', dict(response_transaction))
+                                
+                                else:
+                                    return render(request, 'error/erro.html', dict(update_response))
+
+                    else:
+                        context = {"has_error": True, "error_message": "Opção de pagamento inválida"}
+                        return render(request, 'error/erro.html', dict(context))
 
                 else:
-                    return render(request, 'error/erro.html', dict(card))
-
+                    context = {"has_error": True, "error_message": "Senha do cartão incorreta"}
+                    return render(request, 'error/erro.html', dict(context))
+           
             else:
-                context = {"has_error": True, "error_message": "Opção de pagamento inválida"}
-                return render(request, 'error/erro.html', dict(context))
+                return render(request, 'error/erro.html', dict(card))
 
     return render(request, "web/home.html") 
 
