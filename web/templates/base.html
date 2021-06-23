@@ -28,14 +28,20 @@
             <div class="container-fluid">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'web:home' %}"><img src="{% static 'img/logo.png'%}" alt="logo" id="logo"></a>
+                        <a class="nav-link" href="{% url 'web:home'  %}"><img src="{% static 'img/logo.png'%}" alt="logo" id="logo"></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link">|</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Serviços</a>
-                    </li>
+                    
+                    <li class="nav-item dropdown" style="display:none;" id="services">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Serviços
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                          <li><a class="dropdown-item" href="{% url 'web:change_password' %}">Senha do cartão</a></li>
+                        </ul>
+                      </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Ajuda</a>
                     </li>
@@ -63,9 +69,11 @@
     <script>
         window.onload = function () {
             var logoutGambiarra = document.getElementById('titulo').innerText;
+           
     
             if (logoutGambiarra === 'Home') {
                 document.getElementById('logout').style.display = 'inline';
+                document.getElementById('services').style.display = 'inline';
             }
         }
     </script>
