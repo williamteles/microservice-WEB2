@@ -177,6 +177,22 @@ def get_transactions_from_account(account_id):
         return error
 
 
+def get_transaction_by_id(transaction_id):
+    api_response = requests.get(f"http://account-api:8000/acct/transactions/{transaction_id}")
+    transaction = api_response.json()
+
+    if api_response.status_code == 200:
+        date_obj = datetime.strptime(transaction["date"], '%Y-%m-%d')
+        date = datetime.strftime(date_obj, '%d/%m/%Y')
+        transaction["date"] = date
+        
+        return transaction
+    
+    else:
+        error = {"has_error": True, "error_message": transaction["message"]}
+        return error
+
+
 def delete_transactions(account_id):
     api_response = requests.get(f"http://account-api:8000/acct/transactions/")
     trasactions = api_response.json()
