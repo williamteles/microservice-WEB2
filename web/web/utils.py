@@ -122,6 +122,18 @@ def get_card_from_account(account_id):
         return error
 
 
+def update_card(card):
+    card_id = card["id"]
+    api_response = requests.put(f"http://account-api:8000/acct/cardbill/{card_id}", json=card)
+    payload = api_response.json()
+
+    if api_response.status_code not in (200, 204):
+        error = {"has_error": True, "error_message": "Atualização de cartão não sucedida"}
+        return error
+    
+    return payload
+
+
 def update_card_bill(card_id, final_bill):
     body = {"id": card_id, "bill": final_bill}
     api_response = requests.put(f"http://account-api:8000/acct/cardbill/{card_id}", json=body)
