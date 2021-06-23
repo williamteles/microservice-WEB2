@@ -19,7 +19,7 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     
     {% block css-files%} {% endblock %}
-    <title>Fibobank</title>
+    <title id="titulo">{% block title%} Fibobank{% endblock %}</title>
 </head>
 <body class="d-flex flex-column h-100">
 
@@ -28,7 +28,7 @@
             <div class="container-fluid">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'web:index' %}"><img src="{% static 'img/logo.png'%}" alt="logo" id="logo"></a>
+                        <a class="nav-link" href="{% url 'web:home' %}"><img src="{% static 'img/logo.png'%}" alt="logo" id="logo"></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link">|</a>
@@ -39,9 +39,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Ajuda</a>
                     </li>
-                    <li class="nav-item">
+
+                    <li class="nav-item" style="display: none;" id="logout">
                         <a class="nav-link" href="">Sair <i class="fas fa-sign-out-alt"></i></a>
                     </li>
+
                 </ul>
                 <a class="navbar-brand" href="#">Fibobank</a>
             </div>
@@ -57,6 +59,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous">
+    </script>
+    <script>
+        window.onload = function () {
+            var logoutGambiarra = document.getElementById('titulo').innerText;
+    
+            if (logoutGambiarra === 'Home') {
+                document.getElementById('logout').style.display = 'inline';
+            }
+        }
     </script>
 
     {% block js-files %} {% endblock%}
