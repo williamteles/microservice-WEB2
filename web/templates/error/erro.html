@@ -11,12 +11,19 @@
     <div class="container">
         <div class="card-error">
             <div class="teste">
-                {% if has_error %}
+                {% if has_error == True %}
                     <h2 class="messages-erro">{{error_message}}</h2>
+                    <br>
+                    <br>
+                    <a href="{%url 'web:home' %}" class="btn-fibo-2">Voltar para a sua conta</a>
                 {% endif %}
+
+                {% if has_error == "index" %}
+                    <h2 class="messages-erro">{{error_message}}</h2>
                     <br>
                     <br>
-                    <a href="{%url 'web:home' %}" class="btn-fibo-2">Voltar para a Home</a>
+                    <a href="{%url 'web:index' %}" class="btn-fibo-2">Voltar para a página inical</a>
+                {% endif %}
                 </div>
         </div>
     </div>
