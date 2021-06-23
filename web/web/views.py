@@ -35,31 +35,6 @@ def login(request):
     return render(request, 'register/login.html',{})
 
 
-def change_cardPassword(request, account_id):
-
-    if request.method == "POST":
-        try:
-            owner_id = request.session["user_id"]
-        except:
-            return redirect("web:index")
-
-        user_password = request.POST.get("user_password")
-        card_password = request.POST.get("card_password")
-
-        owner = get_user_by_id(account_id)
-
-        if "has_error" not in owner:
-
-            if user_password != owner["password"]:
-
-                carda = get_card_from_account(account_id)
-
-            print(carda)
-
-
-    return redirect("web:home")
-
-
 def register_user(request):
 
     if request.method == "POST":
@@ -154,7 +129,8 @@ def home(request):
         try:
             owner_id = request.session["user_id"]
         except:
-            return redirect("web:index")
+            context = {"has_error": "index", "error_message": "Sessão expirada"}
+            return render(request, "error/erro.html", dict(context))
 
         
         api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
@@ -169,15 +145,60 @@ def home(request):
                 transactions_account = get_transactions_from_account(account["id"])
 
                 context = {"username": payload["username"], "account": account, "card": account_card, "transactions": list(reversed(transactions_account))}
+                
                 return render(request, 'web/home.html', dict(context))
+            
             else:
-                context = account
-                return render(request, "error/erro.html", dict(context))
+                return render(request, "error/erro.html", dict(account))
+
         else:
             context = {"has_error": True, "error_message": payload["message"]}
             return render(request, "error/erro.html", dict(context))
 
     return render(request, "web/home.html")
+
+
+def change_cardPassword(request, account_id):
+
+    if request.method == "POST":
+        try:
+            owner_id = request.session["user_id"]
+        except:
+            return redirect("web:index")
+
+        user_password = request.POST.get("user_password")
+        card_password = request.POST.get("card_password")
+
+        owner = get_user_by_id(owner_id)
+
+        if "has_error" not in owner:
+            
+            if user_password == owner["password"]:
+                
+                card = get_card_from_account(account_id)
+
+                if "has_error" not in card:
+                    card["password"] = card_password
+
+                    update_response = update_card(card)
+
+                    if "has_error" not in update_response:
+                        context = {"has_error": True, "error_message": "Senha do cartão atualizada!"}
+                        return render(request, 'error/erro.html', dict(context))
+                    else:
+                        return render(request, 'error/erro.html', dict(update_response))
+
+                else:
+                    return render(request, 'error/erro.html', dict(card))
+
+            else:
+                context = {"has_error": True, "error_message": "Senha errada"}
+                return render(request, 'error/erro.html', dict(context))
+
+        else:
+            return render(request, 'error/erro.html', dict(owner))
+
+    return redirect("web:home")
 
 
 def payment(request, account_id):
@@ -362,7 +383,7 @@ def buy(request, account_id):
 
             if "has_error" not in card:
 
-                if card_password != card["password"]:
+                if card_password == card["password"]:
                 
                     if payment_type == "Débito":
 
