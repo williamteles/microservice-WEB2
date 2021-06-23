@@ -328,7 +328,7 @@ def transfer(request, account_id):
                 "time": time_transaction,
                 "value": transfer_value,
                 "type_transaction": type_transaction,
-                "transfer_account": account_transfer["card_number"],
+                "transfer_account": account_transfer["account_number"],
                 "account": account_id
                 }
 
