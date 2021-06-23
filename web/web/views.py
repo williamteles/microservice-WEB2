@@ -3,6 +3,7 @@ from .utils import *
 import requests
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
+from django.http.response import JsonResponse
 
 MAX_TRIES = 10
 
@@ -446,3 +447,12 @@ def buy(request, account_id):
 
 def error(request):
     return render(request, 'error/erro.html')
+
+
+def extrato(request):
+
+    extrato = request.GET.get('extrato')
+
+    if request.is_ajax():
+
+        return JsonResponse({})

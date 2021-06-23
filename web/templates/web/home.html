@@ -49,7 +49,8 @@
                         <div class="card-body">
                             <h4 class="card-subtitle">Saldo disponivel</h4>
                             <p class="card-text saldo-conta">R$ {{account.balance}}</p>
-                            <h4 class="card-subtitle"></h4>
+                            <h6 class="card-subtitle">Tipo da conta: <strong>{{account.type_account}}</strong></h6>
+                            <h6>Numero da conta: <strong>{{account.account_number}}</strong></h6>
                         </div>
                     </div>
                 </div>
@@ -61,15 +62,24 @@
                             <h6>Extratos pagos</h6>
                             <div id="scroll">
                                 {% for extrato in transactions %}
-                                <div class="alert alert-dark extrato-list" id="{{extrato.id}}">
-                                    <p class="form-control">R$ {{extrato.value}}</p>
-                                    <p class="form-control">{{extrato.date}}</p>
-                                    {% if extrato.categories is not None %}
-                                        <p class="form-control">{{extrato.categories}}</p>
-                                    {% else %}
-                                        <p class="form-control">{{extrato.type_transaction}}</p>
-                                    {% endif %}
-                                </div>
+                                <button class="alert alert-dark extrato-list" id="extrato-div" data-bs-toggle="modal" data-bs-target="#teste">
+                                    <div class="row">
+                                        <input type="text" value="{{extrato.id}}" id="extrato-id" style="display:none">
+                                        <div class="col-md-4">
+                                            <p class="form-control">R$ {{extrato.value}}</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="form-control">{{extrato.date}}</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            {% if extrato.categories is not None %}
+                                            <p class="form-control">{{extrato.categories}}</p>
+                                            {% else %}
+                                            <p class="form-control">{{extrato.type_transaction}}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </button>
                                 {% endfor %}
                             </div>
                         </div>
@@ -82,7 +92,7 @@
     </div>
         
       
-    <div class="modal fade" id="cartao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="cartao" tabindex="-1" aria-labelledby="Cartão" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -121,7 +131,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="transition" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="transition" tabindex="-1" aria-labelledby="Transações" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -140,8 +150,8 @@
                 </select>
                 <div style="margin-top: 10px;" id="transition-div-row">
                     
-                    {% if account.type_account == 'corrente'%}
                     <div id="payment" style="display:none;">
+                    {% if account.type_account == 'corrente'%}
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Valor da Fatura</label>
@@ -162,8 +172,8 @@
                                 </form>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
 
                     <div id="deposit" style="display:none;">
                         <form method="POST" action="{% url 'web:deposit' account.id %}">
@@ -227,7 +237,7 @@
                                             <option value="Crédito">Crédito</option>
                                         </select>
                                         {% else %}
-                                            <input type="text" value="Débito" name="payment_type" class="form-control">
+                                            <input type="text" value="Débito" name="payment_type" class="form-control" readonly>
                                         {% endif %}
                                 </div>
 
@@ -248,6 +258,20 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="teste" tabindex="-1" aria-labelledby="teste" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                
+              </div>
+            </div>
+          </div>
+    </div>
 {% endblock %}
 
 {% block js-files %}

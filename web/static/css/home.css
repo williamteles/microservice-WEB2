@@ -55,7 +55,7 @@
 .extrato-list {
     margin-top: 10px;
     height: min-content;
-    display: flex;
+    width: 98%;
     margin-right: 5px;
 }
 
