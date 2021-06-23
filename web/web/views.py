@@ -479,3 +479,7 @@ def extrato(request):
             transaction = get_transaction_by_id(transaction_id)
 
             return JsonResponse(dict(transaction))
+
+
+def quit(request):
+    return redirect("web:index")
