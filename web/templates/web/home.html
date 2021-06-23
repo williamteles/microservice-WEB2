@@ -62,9 +62,8 @@
                             <h6>Extratos pagos</h6>
                             <div id="scroll">
                                 {% for extrato in transactions %}
-                                <button class="alert alert-dark extrato-list" id="extrato-div" data-bs-toggle="modal" data-bs-target="#teste">
+                                <button class="alert alert-dark extrato-list" id="extrato_{{extrato.id}}" onclick = extrato(this) data-bs-toggle="modal" data-bs-target="#teste">
                                     <div class="row">
-                                        <input type="text" value="{{extrato.id}}" id="extrato-id" style="display:none">
                                         <div class="col-md-4">
                                             <p class="form-control">R$ {{extrato.value}}</p>
                                         </div>
@@ -148,6 +147,7 @@
                     <option value="transferencias">Transferências</option>
                     <option value="compra">Compra</option>
                 </select>
+
                 <div style="margin-top: 10px;" id="transition-div-row">
                     
                     <div id="payment" style="display:none;">
@@ -213,7 +213,7 @@
                         <form method="POST" action="{% url 'web:buy' account.id %}">
                             {% csrf_token %}
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <select name="buy_type" id="" class="form-select">
                                         <option selected>---- ----</option>
                                         <option value="Restaurante">Restaurante</option>
@@ -228,24 +228,29 @@
                                         <option value="Outros">Outros</option>
                                     </select>
                                 </div>
-
-                                <div class="col-md-3">
+                            </div>
+                                <br>
+                            <div class="row">
+                                <div class="col-md-4">
                                     {% if account.type_account == 'corrente'%}
-                                        <select name="payment_type" class="form-select">
-                                            <option selected>---- ---</option>
-                                            <option value="Débito">Débito</option>
-                                            <option value="Crédito">Crédito</option>
-                                        </select>
-                                        {% else %}
-                                            <input type="text" value="Débito" name="payment_type" class="form-control" readonly>
-                                        {% endif %}
+                                    <select name="payment_type" class="form-select">
+                                        <option selected>---- ---</option>
+                                        <option value="Débito">Débito</option>
+                                        <option value="Crédito">Crédito</option>
+                                    </select>
+                                    {% else %}
+                                    <input type="text" value="Débito" name="payment_type" class="form-control" readonly>
+                                    {% endif %}
                                 </div>
-
+                                <div class="col-md-5">
+                                    <input type="password" name='card_password' placeholder="senha do cartão" class="form-control">
+                                </div>
+                                
                                 <div class="col-md-3">
                                     <input type="number" name="buy_value" class="form-control">
                                 </div>
-
                             </div>
+
                             <div class="row" style="margin-top: 10px;">
                                 <button class="btn-fibo-1" >Comprar</button>
                             </div>
@@ -258,15 +263,14 @@
         </div>
     </div>
 
-
     <div class="modal fade" id="teste" tabindex="-1" aria-labelledby="teste" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Extrato Completo</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body" id="div-modal-body">
                 
               </div>
             </div>
@@ -277,4 +281,5 @@
 {% block js-files %}
     {% load static %}
     <script src="{% static 'js/transacao.js'%}"></script>
+    <script src="{% static 'js/dataAccount.js'%}"></script>
 {% endblock %}
