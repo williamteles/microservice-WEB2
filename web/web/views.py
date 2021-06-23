@@ -375,7 +375,7 @@ def buy(request, account_id):
     if request.method == "POST":
         payment_type = request.POST.get("payment_type")
         buy_value = float(request.POST.get("buy_value"))
-        card_password = request.POST.get("card_password")
+        card_password = int(request.POST.get("card_password"))
         categories = request.POST.get("buy_type")
         date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
         time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
