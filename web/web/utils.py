@@ -208,6 +208,11 @@ def get_transaction_by_id(transaction_id):
         date_obj = datetime.strptime(transaction["date"], '%Y-%m-%d')
         date = datetime.strftime(date_obj, '%d/%m/%Y')
         transaction["date"] = date
+
+        if transaction["card"] is not None:
+            card_id = transaction["card"]
+            card = requests.get(f"http://account-api:8000/acct/card/{card_id}").json()
+            transaction["card"] = card["card_number"]
         
         return transaction
     
