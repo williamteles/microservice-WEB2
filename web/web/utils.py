@@ -181,6 +181,17 @@ def get_transactions_from_account(account_id):
                 date_obj = datetime.strptime(transaction["date"], '%Y-%m-%d')
                 date = datetime.strftime(date_obj, '%d/%m/%Y')
                 transaction["date"] = date
+
+                if transaction["card"] is not None:
+                    card_id = transaction["card"]
+                    card = requests.get(f"http://account-api:8000/acct/card/{card_id}").json()
+                    transaction["card"] = card["card_number"]
+                
+                # if transaction["transfer_account"] is not None:
+                #     t_account_id = transaction["transfer_account"]
+                #     t_account = requests.get(f"http://account-api:8000/acct/account/{t_account_id}").json()
+                #     transaction["transfer_account"] = t_account["account_number"]
+
                 account_transactions.append(transaction)
         
         return account_transactions
