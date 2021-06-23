@@ -451,8 +451,10 @@ def error(request):
 
 def extrato(request):
 
-    extrato = request.GET.get('extrato')
+    if request.method == "GET":
+        transaction_id = request.GET.get("extrato")
 
-    if request.is_ajax():
+        if request.is_ajax():
+            transaction = get_transaction_by_id(transaction_id)
 
-        return JsonResponse({})
+            return JsonResponse(dict(transaction))
