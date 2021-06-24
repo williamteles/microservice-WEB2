@@ -218,6 +218,14 @@ def get_transaction_by_id(transaction_id, account_id):
 
         if transaction["transfer_account"] == account["account_number"]:
             transaction["type_transaction"] = "Recebido"
+            
+            sender_account_id = transaction["account"]
+            sender_account = get_account_by_id(sender_account_id)
+
+            if "has_error" not in sender_account:
+                transaction["account"] = sender_account["account_number"]
+            else:
+                transaction["account"] = " "
 
         if transaction["card"] is not None:
             card_id = transaction["card"]
