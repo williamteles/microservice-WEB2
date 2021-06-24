@@ -205,7 +205,7 @@ def get_transactions_from_account(account_id):
         return error
 
 
-def get_transaction_by_id(transaction_id):
+def get_transaction_by_id(transaction_id, account_id):
     api_response = requests.get(f"http://account-api:8000/acct/transactions/{transaction_id}")
     transaction = api_response.json()
 
@@ -214,7 +214,6 @@ def get_transaction_by_id(transaction_id):
         date = datetime.strftime(date_obj, '%d/%m/%Y')
         transaction["date"] = date
 
-        account_id = transaction["account"]
         account = get_account_by_id(account_id)
 
         if transaction["transfer_account"] == account["account_number"]:

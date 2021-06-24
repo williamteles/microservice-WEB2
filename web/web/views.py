@@ -158,7 +158,7 @@ def home(request):
     return render(request, "web/home.html")
 
 
-def change_cardPassword(request, account_id):
+def change_cardPassword(request):
 
     if request.method == "POST":
         try:
@@ -176,8 +176,10 @@ def change_cardPassword(request, account_id):
             if "has_error" not in owner:
                 
                 if user_password == owner["password"]:
+
+                    account = get_account_from_owner(owner_id)
                     
-                    card = get_card_from_account(account_id)
+                    card = get_card_from_account(account["id"])
 
                     if "has_error" not in card:
                         card["password"] = card_password
@@ -480,13 +482,24 @@ def error(request):
 def extrato(request):
 
     if request.method == "GET":
-        transaction_id = request.GET.get("extrato")
+        try:
+            owner_id = request.session["user_id"]
+        except:
+            return redirect("web:index")
 
-        if request.is_ajax():
-            transaction = get_transaction_by_id(transaction_id)
+        account = get_account_from_owner(owner_id)
 
-            return JsonResponse(dict(transaction))
+        if "has_error" not in account:
+            transaction_id = request.GET.get("extrato")
+            account_id = account["id"]
 
+            if request.is_ajax():
+                transaction = get_transaction_by_id(transaction_id, account_id)
+
+                return JsonResponse(dict(transaction))
+        
+        else:
+            return render(request, 'error/erro.html', dict(account))
 
 def quit(request):
     return redirect("web:index")
