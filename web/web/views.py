@@ -501,5 +501,6 @@ def extrato(request):
         else:
             return render(request, 'error/erro.html', dict(account))
 
+
 def quit(request):
     return redirect("web:index")
