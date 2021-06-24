@@ -59,6 +59,6 @@ class Transactions(models.Model):
     categories = models.CharField(max_length=50, choices=CATEGORIES, null=True, blank=True)
     type_transaction = models.CharField(max_length=50, choices=TYPE)
     payment_type = models.CharField(max_length=50, choices=PAYMENT_TYPE, null=True, blank=True)
-    transfer_account = models.PositiveIntegerField(null=True, blank=True)
+    transfer_account = models.CharField(max_length=10, null=True, blank=True, unique=False)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     card = models.ForeignKey(Card, on_delete=models.CASCADE, null=True, blank=True)

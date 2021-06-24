@@ -177,10 +177,25 @@ def get_transactions_from_account(account_id):
         account_transactions =  []
         
         for transaction in transactions:
+            date_converted = False
+
             if transaction["account"] == account_id:
                 date_obj = datetime.strptime(transaction["date"], '%Y-%m-%d')
                 date = datetime.strftime(date_obj, '%d/%m/%Y')
                 transaction["date"] = date
+                date_converted = True
+
+                account_transactions.append(transaction)
+
+            account = get_account_by_id(account_id)
+
+            if transaction["transfer_account"] == account["account_number"]:
+                if not date_converted:
+                    date_obj = datetime.strptime(transaction["date"], '%Y-%m-%d')
+                    date = datetime.strftime(date_obj, '%d/%m/%Y')
+                    transaction["date"] = date
+
+                transaction["type_transaction"] = "Recebido"
 
                 account_transactions.append(transaction)
         
@@ -198,6 +213,12 @@ def get_transaction_by_id(transaction_id):
         date_obj = datetime.strptime(transaction["date"], '%Y-%m-%d')
         date = datetime.strftime(date_obj, '%d/%m/%Y')
         transaction["date"] = date
+
+        account_id = transaction["account"]
+        account = get_account_by_id(account_id)
+
+        if transaction["transfer_account"] == account["account_number"]:
+            transaction["type_transaction"] = "Recebido"
 
         if transaction["card"] is not None:
             card_id = transaction["card"]
