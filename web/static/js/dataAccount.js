@@ -137,7 +137,7 @@ function extrato(buttonExtrato) {
                 divValueRow.append(divAccountTransferCol);
     
                 var labelAccountTransferNode = document.createElement('label');
-                labelAccountTransferNode.innerText = 'Conta Transferência';
+                labelAccountTransferNode.innerText = 'Conta de Destino';
                 divAccountTransferCol.append(labelAccountTransferNode);
     
                 var accountTransfer = document.createElement('p');
@@ -145,6 +145,38 @@ function extrato(buttonExtrato) {
                 accountTransfer.innerText = response.transfer_account;
                 divAccountTransferCol.append(accountTransfer);
             }
+
+           
+            else if (response.type_transaction === 'Recebido') {
+                
+                divValeuCol = document.createElement('div');
+                divValeuCol.setAttribute('class','col-md-6');
+                divValueRow.append(divValeuCol);
+    
+                labelValueNode = document.createElement('label');
+                labelValueNode.innerText = 'Valor';
+                divValeuCol.append(labelValueNode);
+    
+                valor = document.createElement('p');
+                valor.setAttribute('class','form-control');
+                valor.innerText = 'R$ ' + response.value;
+                divValeuCol.append(valor);
+
+                var divAccountTransferCol = document.createElement('div');
+                divAccountTransferCol.setAttribute('class','col-md-6');
+                divValueRow.append(divAccountTransferCol);
+    
+                var labelAccountTransferNode = document.createElement('label');
+                labelAccountTransferNode.innerText = 'Conta de Origem';
+                divAccountTransferCol.append(labelAccountTransferNode);
+    
+                var accountTransfer = document.createElement('p');
+                accountTransfer.setAttribute('class','form-control');
+                accountTransfer.innerText = response.account;
+                divAccountTransferCol.append(accountTransfer);
+            }
+
+           
 
             else {
                 divValeuCol = document.createElement('div');
