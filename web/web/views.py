@@ -132,7 +132,6 @@ def home(request):
             context = {"has_error": "index", "error_message": "Sessão expirada"}
             return render(request, "error/erro.html", dict(context))
 
-        
         api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
         payload = api_response_user.json()
 
@@ -158,7 +157,7 @@ def home(request):
     return render(request, "web/home.html")
 
 
-def change_cardPassword(request):
+def change_card_password(request):
 
     if request.method == "POST":
         try:
