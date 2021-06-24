@@ -22,9 +22,9 @@
 
             <input type="email" class="form-control" name="email" placeholder="E-mail" required autofocus>
             
-            <input type="password" class="form-control" name="password1" placeholder="Senha" id='pass1' required>
+            <input type="password" class="form-control" name="password1" placeholder="Senha" id='password_1' required>
             
-            <input type="password" class="form-control" name="password2" placeholder="Confirmação de senha" id="pass2" required>
+            <input type="password" class="form-control" name="password2" placeholder="Confirmação de senha" id="password_2" required>
             
             
             <button type="submit" class="btn btn-lg btn-success" id="btn-register">Redefinir</button>
@@ -45,31 +45,5 @@
 {% endblock %}
 
 {% block js-files %} 
-    <script>
-
-        document.getElementById('pass2').addEventListener('input', () => {
-            pass_1 = document.getElementById('pass1').value;
-            pass_2 = document.getElementById('pass2').value;
-            
-            if (pass_1 != pass_2) {
-                
-                var div = document.getElementById('error');
-
-                $(div).empty();
-                
-                var erroTag = document.createElement('p');
-                erroTag.setAttribute('class', 'messages');
-                erroTag.innerText = 'Senhas não são iguais.'
-                div.append(erroTag)
-                
-                document.getElementById('btn-register').disabled = true;
-
-
-            } else {
-                document.getElementById('btn-register').disabled = false;
-            }
-
-        } )
-
-    </script>
+    <script src="{% static 'js/verifypassword.js' %}"></script>
 {% endblock%}

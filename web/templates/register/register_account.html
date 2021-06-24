@@ -25,16 +25,22 @@
                 <option value="salario">Conta Salario</option>
             </select>
             
-            <input type="password" class="form-select" placeholder="Crie uma senha de 4 digitos" name="card_password" required>
+            <input type="password" class="form-control" placeholder="Crie uma senha de 4 digitos" name="card_password" minlength="4" maxlength="4" id="password_1" required>
 
-            <button type="submit" class="btn btn-lg btn-success">Criar conta</button>
+            <button type="submit" class="btn btn-lg btn-success" id="btn-register" disabled>Criar conta</button>
             
         </form>
         
         {% if has_error %}
             <p class="messages" >{{error_message}}</p>
         {% endif %}
+
+        <div id="error"></div>
     </main>
     
 </div>
+{% endblock %}
+
+{% block js-files %} 
+<script src="{% static 'js/passwordCard.js'%}"></script>
 {% endblock %}
