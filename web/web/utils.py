@@ -102,7 +102,7 @@ def create_card(body):
     return payload
 
 
-def get_card_from_account(account_id):
+def get_card_from_account(account_id, convert=True):
     response = requests.get("http://account-api:8000/acct/card/")
     cards = response.json()
 
@@ -112,9 +112,10 @@ def get_card_from_account(account_id):
         
         for card in cards:
             if card["account"] == account_id:
-                expire_date_obj = datetime.strptime(card["expire_date"], '%Y-%m-%d')
-                expire_date = datetime.strftime(expire_date_obj, '%m/%Y')
-                card["expire_date"] = expire_date
+                if convert:
+                    expire_date_obj = datetime.strptime(card["expire_date"], '%Y-%m-%d')
+                    expire_date = datetime.strftime(expire_date_obj, '%m/%Y')
+                    card["expire_date"] = expire_date
 
                 return card        
     else:
@@ -124,9 +125,9 @@ def get_card_from_account(account_id):
 
 def update_card(card):
     card_id = card["id"]
-    api_response = requests.put(f"http://account-api:8000/acct/cardbill/{card_id}", json=card)
+    api_response = requests.put(f"http://account-api:8000/acct/card/{card_id}", json=card)
     payload = api_response.json()
-
+    
     if api_response.status_code not in (200, 204):
         error = {"has_error": True, "error_message": "Atualização de cartão não sucedida"}
         return error

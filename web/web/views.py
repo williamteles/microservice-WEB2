@@ -169,7 +169,7 @@ def change_cardPassword(request):
         user_password = request.POST.get("user_password")
         card_password = request.POST.get("card_password")
         card_password2 = request.POST.get("card_password2")
-
+        
         if card_password == card_password2:
             owner = get_user_by_id(owner_id)
 
@@ -179,11 +179,10 @@ def change_cardPassword(request):
 
                     account = get_account_from_owner(owner_id)
                     
-                    card = get_card_from_account(account["id"])
+                    card = get_card_from_account(account["id"], convert=False)
 
                     if "has_error" not in card:
                         card["password"] = card_password
-
                         update_response = update_card(card)
 
                         if "has_error" not in update_response:
