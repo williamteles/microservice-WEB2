@@ -206,7 +206,7 @@ def change_cardPassword(request):
             context = {"has_error": True, "error_message": "Senhas não foram digitadas iguais."}
             return render(request, 'error/erro.html', dict(context))
 
-    return redirect("web:home")
+    return render(request,'web/changepassword.html',{})
 
 
 def payment(request, account_id):
