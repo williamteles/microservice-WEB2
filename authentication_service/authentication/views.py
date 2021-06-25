@@ -1,4 +1,4 @@
-from .models import User
+from .models import Users
 from .serializers import CustomTokenVerifySerializer, UserSerializer
 from .utils import generate_error_message
 from django.http import Http404
@@ -19,13 +19,13 @@ class LoginView(APIView):
             username = request.data["username"]
             password = request.data["password"]
 
-            user = User.objects.get(username=username, password=password)
+            user = Users.objects.get(cpf=username, password=password)
 
         except KeyError:
-            error_message = "A solicitação deve conter um usuário e uma senha"
+            error_message = "A solicitação deve conter um cpf e uma senha"
             return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
 
-        except User.DoesNotExist:
+        except Users.DoesNotExist:
             error_message = "Senha inválida ou Usuário não existe"
             return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
 
@@ -51,7 +51,7 @@ class UserList(mixins.ListModelMixin,
                mixins.CreateModelMixin,
                GenericAPIView):
 
-    queryset = User.objects.all()
+    queryset = Users.objects.all()
     serializer_class = UserSerializer
 
     def get(self, request, *args, **kwargs):
@@ -72,7 +72,7 @@ class UserDetail(mixins.RetrieveModelMixin,
                  mixins.DestroyModelMixin,
                  GenericAPIView):
 
-    queryset = User.objects.all()
+    queryset = Users.objects.all()
     serializer_class = UserSerializer
 
     def get(self, request, *args, **kwargs):

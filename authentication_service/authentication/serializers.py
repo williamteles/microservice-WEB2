@@ -1,4 +1,4 @@
-from .models import User
+from .models import Users
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenVerifySerializer
 from rest_framework_simplejwt.tokens import UntypedToken
@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import UntypedToken
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Users
         fields = "__all__"
 
 
