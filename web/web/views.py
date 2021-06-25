@@ -1,11 +1,14 @@
 from django.shortcuts import redirect, render
-from .utils import *
+from .utils import rand_N_digits
+from .cruds.cruds_functions import *
 import requests
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.http.response import JsonResponse
 
+
 MAX_TRIES = 10
+
 
 def index(request):
     return render(request, 'web/index.html')
@@ -41,6 +44,7 @@ def register_user(request):
         username = request.POST.get("username")
         password = request.POST.get("password1")
         email = request.POST.get("email")
+        
         body = {"username": username, "password": password, "email": email}
 
         api_response = requests.post("http://auth-api:8000/auth/user/", json=body)
@@ -125,6 +129,7 @@ def register_account(request):
 
 
 def home(request):
+    
     if request.method == "GET":
         try:
             owner_id = request.session["user_id"]
