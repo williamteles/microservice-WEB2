@@ -501,4 +501,5 @@ def extrato(request):
 
 
 def quit(request):
+    request.session.flush()
     return redirect("web:index")
