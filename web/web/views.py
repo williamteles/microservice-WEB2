@@ -238,18 +238,20 @@ def payment(request, account_id):
 
         if "has_error" not in account:
             balance = float(account["balance"])
-            final_balance = balance - payment_value
+            final_balance = round(balance - payment_value)
 
             if final_balance < 0:
                 context = {"has_error": True, "error_message": "Saldo Insuficiente"}
                 return render(request, 'error/erro.html', dict(context))
             else:
                 card = get_card_from_account(account_id)
-                final_bill = float(card["bill"])- payment_value
+                final_bill = round(float(card["bill"]) - payment_value)
+                if card["bill"] == "0.00":
+                    return redirect("web:home")
                     
                 if final_bill < 0:
-                    final_balance += abs(final_bill)
-
+                    final_balance = round(final_balance + abs(final_bill))
+                    transaction_body["value"] = round(payment_value + final_bill)
                     bill_update = update_card_bill(card["id"], 0)
                     
                     if "has_error" in bill_update:
@@ -276,11 +278,11 @@ def payment(request, account_id):
         else:
             return render(request, 'error/erro.html', dict(account))
 
-    return render(request, "web/home.html")
+    return redirect("web:home")
 
 
 def deposit(request, account_id):
-    
+
     if request.method == "POST":
         date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
         time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
@@ -299,10 +301,10 @@ def deposit(request, account_id):
 
         if "has_error" not in account:
             balance = float(account["balance"])
-            final_balance = balance + deposit_value
+            final_balance = round(balance + deposit_value, 2)
 
             update_balance = update_account_balance(account_id, final_balance)
-
+            
             if "has_error" not in update_balance:
                 response_transaction = create_transaction(transaction_body)
 
@@ -311,11 +313,13 @@ def deposit(request, account_id):
                 
                 else:
                     return render(request, 'error/erro.html', dict(response_transaction))
+            else:
+                return render(request, 'error/erro.html', dict(update_balance))
         
         else:
             return render(request, 'web/home.html', dict(account))
     
-    return render(request, "web/home.html")
+    return redirect("web:home")
 
 
 def transfer(request, account_id):
@@ -343,7 +347,7 @@ def transfer(request, account_id):
                 }
 
             balance = float(account["balance"])
-            final_balance = balance - transfer_value
+            final_balance = round(balance - transfer_value)
 
             if final_balance < 0:
                 context = {"has_error": True, "error_message": "Saldo Insuficiente"}
@@ -351,7 +355,7 @@ def transfer(request, account_id):
             
             else:
                 balance_transfer =  float(account_transfer["balance"])
-                final_balance_transfer = balance_transfer + transfer_value
+                final_balance_transfer = round(balance_transfer + transfer_value)
                 
                 update_balance = update_account_balance(account_id, final_balance)
                 if "has_error" not in update_balance:
@@ -377,7 +381,7 @@ def transfer(request, account_id):
         else:
             return render(request, 'error/erro.html', dict(account))
     
-    return render(request, "web/home.html")
+    return redirect("web:home")
 
 
 def buy(request, account_id):
@@ -415,7 +419,7 @@ def buy(request, account_id):
                                 }
                         
                         balance = float(account["balance"])
-                        final_balance = balance - buy_value
+                        final_balance = round(balance - buy_value)
 
                         if final_balance < 0:
                             context = {"has_error": True, "error_message": "Saldo Insuficiente"}
@@ -449,7 +453,7 @@ def buy(request, account_id):
                                     }
                             
                             bill = float(card["bill"])
-                            final_bill = bill + buy_value
+                            final_bill = round(bill + buy_value)
 
                             if final_bill > float(card["limit"]):
                                 context = {"has_error": True, "error_message": "Limite Insuficiente"}
@@ -480,7 +484,7 @@ def buy(request, account_id):
             else:
                 return render(request, 'error/erro.html', dict(card))
 
-    return render(request, "web/home.html") 
+    return redirect("web:home") 
 
 
 def error(request):
