@@ -31,6 +31,7 @@ def get_account_from_owner(owner_id):
 
     return {}
 
+
 def get_account_by_id(account_id):
     api_response = requests.get(f"http://account-api:8000/acct/account/{account_id}")
     account = api_response.json()
@@ -58,19 +59,19 @@ def get_account_by_account_number(account_number):
         return error
     
     else:
-        error = {"has_error": True, "error_message": payload["message"]}
+        error = {"has_error": True, "error_message": accounts["message"]}
         return error
 
 
 def update_account_balance(acocunt_id, final_balance):
     body = {"id": acocunt_id, "balance": final_balance}
     api_response = requests.put(f"http://account-api:8000/acct/accountbalance/{acocunt_id}", json=body)
-
+    
     if api_response.status_code not in (200, 204):
         error = {"has_error": True, "error_message": "Atualização de saldo não sucedida"}
         return error
     
-    return {}
+    return api_response.json()
 
 
 def delete_account(account_id):
