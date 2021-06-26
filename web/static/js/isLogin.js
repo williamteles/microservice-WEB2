@@ -6,4 +6,8 @@ window.onload = function () {
         document.getElementById('logout').style.display = 'inline';
         document.getElementById('services').style.display = 'inline';
     }
+
+    else {
+        document.getElementById('logo').parentNode.href = '/';
+    }
 }
