@@ -1,11 +1,14 @@
 from django.shortcuts import redirect, render
-from .utils import *
+from .utils import rand_N_digits
+from .cruds.cruds_functions import *
 import requests
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.http.response import JsonResponse
 
+
 MAX_TRIES = 10
+
 
 def index(request):
     return render(request, 'web/index.html')
@@ -41,6 +44,7 @@ def register_user(request):
         username = request.POST.get("username")
         password = request.POST.get("password1")
         email = request.POST.get("email")
+        
         body = {"username": username, "password": password, "email": email}
 
         api_response = requests.post("http://auth-api:8000/auth/user/", json=body)
@@ -125,6 +129,7 @@ def register_account(request):
 
 
 def home(request):
+    
     if request.method == "GET":
         try:
             owner_id = request.session["user_id"]
@@ -132,7 +137,6 @@ def home(request):
             context = {"has_error": "index", "error_message": "Sessão expirada"}
             return render(request, "error/erro.html", dict(context))
 
-        
         api_response_user = requests.get(f"http://auth-api:8000/auth/user/{owner_id}/")
         payload = api_response_user.json()
 
@@ -158,7 +162,7 @@ def home(request):
     return render(request, "web/home.html")
 
 
-def change_cardPassword(request):
+def change_card_password(request):
 
     if request.method == "POST":
         try:
@@ -169,7 +173,7 @@ def change_cardPassword(request):
         user_password = request.POST.get("user_password")
         card_password = request.POST.get("card_password")
         card_password2 = request.POST.get("card_password2")
-
+        
         if card_password == card_password2:
             owner = get_user_by_id(owner_id)
 
@@ -179,11 +183,10 @@ def change_cardPassword(request):
 
                     account = get_account_from_owner(owner_id)
                     
-                    card = get_card_from_account(account["id"])
+                    card = get_card_from_account(account["id"], convert=False)
 
                     if "has_error" not in card:
                         card["password"] = card_password
-
                         update_response = update_card(card)
 
                         if "has_error" not in update_response:
@@ -503,4 +506,5 @@ def extrato(request):
 
 
 def quit(request):
+    request.session.flush()
     return redirect("web:index")

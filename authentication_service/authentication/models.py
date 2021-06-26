@@ -1,11 +1,10 @@
-from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
-class User(AbstractUser):
+class Users(models.Model):
+    cpf = models.CharField(max_length=14, unique=True)
+    full_name = models.CharField(max_length=100, blank=False, null=False)
+    password = models.CharField(max_length=32, blank=False, null=False)
+    is_active = models.BooleanField(default=False)
+    email = models.EmailField(max_length=50, blank=False, null=False, unique=True)
 
-    is_superuser = None
-    first_name = None
-    is_staff = None
-    last_login = None
-    last_name = None
-    date_joined = None
