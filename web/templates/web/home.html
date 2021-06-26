@@ -49,7 +49,7 @@
                     <div class="card saldo"> <!---26.83rem-->
                         <div class="card-body">
                             <h4 class="card-subtitle">Saldo disponivel</h4>
-                            <p class="card-text saldo-conta">R$ {{account.balance}}</p>
+                            <p class="card-text saldo-conta money">{{account.balance}}</p>
                             <h6 class="card-subtitle">Tipo da conta: <strong>{{account.type_account}}</strong></h6>
                             <h6>Numero da conta: <strong>{{account.account_number}}</strong></h6>
                         </div>
@@ -66,7 +66,7 @@
                                 <button class="alert alert-dark extrato-list" id="extrato_{{extrato.id}}" onclick = extrato(this) data-bs-toggle="modal" data-bs-target="#teste">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <p class="form-control">R$ {{extrato.value}}</p>
+                                            <p class="form-control money">{{extrato.value}}</p>
                                         </div>
                                         <div class="col-md-4">
                                             <p class="form-control">{{extrato.date}}</p>
@@ -118,11 +118,11 @@
                 <div class="row" style="margin-top: 10px;">
                     <div class="col-md-6">
                         <label>Fatura</label>
-                        <input type="text" value="R${{card.bill}}" class="form-control" style="width: auto;" disabled>
+                        <p class="form-control money"  style="width: auto; background-color: #e9ecef;">{{card.bill}}</p>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <label>Limite</label>
-                        <input type="text" class="form-control" value="R$ {{card.limit}}" style="width: auto;" disabled>
+                        <p class="form-control money" style="width: 100%; background-color: #e9ecef;">{{card.limit}}</p>
                     </div>
                 </div>
                 {% endif %}
@@ -139,6 +139,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="transition-div">
+
                 <select name="" id="transacao" class="form-select">
                     <option selected>---- ----</option>
                     {% if account.type_account == 'corrente' %}
@@ -154,17 +155,17 @@
                     <div id="payment" style="display:none;">
                     {% if account.type_account == 'corrente'%}
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label>Valor da Fatura</label>
-                                <input type="text" class="form-control" value="R$ {{card.bill}}" disabled>
+                                <p class="form-control money"  style="width: auto; background-color: #e9ecef;">{{card.bill}}</p>
                             </div>
                             
-                            <div class="col-md-6" style="margin-top: 15px;">
+                            <div class="col-md-8" style="margin-top: 15px;">
                                 <form method="POST" action="{% url 'web:payment' account.id %}"  style="margin-top: 10px;">
                                     {% csrf_token %}
                                     <div class="row">
-                                        <div class="col-md-5">
-                                            <input type="number" class="form-control" name="payment_value" placeholder="Valor">
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" id="money" name="payment_value" placeholder="Valor">
                                         </div>
                                         <div class="col-md-5">
                                             <button class="btn-fibo-1" style="width: 100px;">Pagar</button>
@@ -182,7 +183,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Valor para depósito</label>
-                                    <input type="number" class="form-control" name="deposit_value" placeholder="Valor">
+                                    <input type="text" class="form-control" id="money" name="deposit_value" placeholder="Valor">
                                 </div>
                                 <div class="col-md-6" style="margin-top: 15px;">
                                     <button class="btn-fibo-1" style="width: 100px;">Depositar</button>
@@ -197,7 +198,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <label>Valor</label>
-                                    <input type="number" class="form-control" name="transfer_value" placeholder="Valor">
+                                    <input type="text" class="form-control" id="money" name="transfer_value" placeholder="Valor">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Conta</label>
@@ -244,7 +245,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-md-5">
-                                    <input type="password" name='card_password' placeholder="Senha do cartão" class="form-control">
+                                    <input type="password" name='card_password' id="password_1" placeholder="Senha do cartão" class="form-control" minlength="4" maxlength="4" required>
                                 </div>
                                 
                                 <div class="col-md-3">
@@ -283,4 +284,6 @@
     {% load static %}
     <script src="{% static 'js/transacao.js'%}"></script>
     <script src="{% static 'js/dataAccount.js'%}"></script>
+    <script src="{% static 'js/mask.js'%}"></script>
+    <script src="{% static 'js/passwordCard.js'%}"></script>      
 {% endblock %}

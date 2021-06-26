@@ -65,7 +65,6 @@ function extrato(buttonExtrato) {
                 var cardNumber = document.createElement('p');
                 cardNumber.setAttribute('class','form-control');
                 cardNumber.innerText = response.card;
-                console.log(response.card)
                 divCardCol.append(cardNumber);
 
 
@@ -88,6 +87,8 @@ function extrato(buttonExtrato) {
             divValueRow.setAttribute('class','row');
             modalDivNode.append(divValueRow)
 
+            var money = parseFloat(response.value);
+
             if (response.type_transaction === 'Compra') {
                 
                 var divValeuCol = document.createElement('div');
@@ -100,7 +101,7 @@ function extrato(buttonExtrato) {
     
                 var valor = document.createElement('p');
                 valor.setAttribute('class','form-control');
-                valor.innerText = 'R$ ' + response.value;
+                valor.innerText = money.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
                 divValeuCol.append(valor);
 
                 var divPaymentTypeCol = document.createElement('div');
@@ -129,7 +130,7 @@ function extrato(buttonExtrato) {
     
                 valor = document.createElement('p');
                 valor.setAttribute('class','form-control');
-                valor.innerText = 'R$ ' + response.value;
+                valor.innerText = money.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
                 divValeuCol.append(valor);
 
                 var divAccountTransferCol = document.createElement('div');
@@ -159,7 +160,7 @@ function extrato(buttonExtrato) {
     
                 valor = document.createElement('p');
                 valor.setAttribute('class','form-control');
-                valor.innerText = 'R$ ' + response.value;
+                valor.innerText = money.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
                 divValeuCol.append(valor);
 
                 var divAccountTransferCol = document.createElement('div');
@@ -189,7 +190,7 @@ function extrato(buttonExtrato) {
 
                 valor = document.createElement('p');
                 valor.setAttribute('class','form-control');
-                valor.innerText = 'R$ ' + response.value;
+                valor.innerText = money.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
                 divValeuCol.append(valor);
             }
            
