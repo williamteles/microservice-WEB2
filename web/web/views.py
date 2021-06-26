@@ -41,21 +41,20 @@ def login(request):
 def register_user(request):
 
     if request.method == "POST":
-        username = request.POST.get("username")
+        full_name = request.POST.get("full_name")
         password = request.POST.get("password1")
         email = request.POST.get("email")
-        
-        body = {"username": username, "password": password, "email": email}
+        cpf = request.POST.get("cpf")
 
-        api_response = requests.post("http://auth-api:8000/auth/user/", json=body)
-        payload = api_response.json()
+        body = {"full_name": full_name, "password": password, "email": email, "cpf": cpf}
 
-        if api_response.status_code == 201:
-            request.session["user_id"] = payload["id"]
+        register_response = create_user(body)
+
+        if "has_error" not in register_response:
+            request.session["user_id"] = register_response["id"]
             response = redirect("/register/account")
         else:
-            context = {"has_error": True, "error_message": payload["message"]}
-            response = render(request, 'register/register_user.html', dict(context))
+            response = render(request, 'register/register_user.html', dict(register_response))
 
         return response
 
@@ -148,7 +147,7 @@ def home(request):
 
                 transactions_account = get_transactions_from_account(account["id"])
 
-                context = {"username": payload["username"], "account": account, "card": account_card, "transactions": list(reversed(transactions_account))}
+                context = {"username": payload["full_name"], "account": account, "card": account_card, "transactions": list(reversed(transactions_account))}
                 
                 return render(request, 'web/home.html', dict(context))
             
