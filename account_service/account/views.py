@@ -8,37 +8,6 @@ from .utils import generate_error_message
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 
-# from account_service.account import serializers
-
-
-# class AccountView(APIView):
-
-#     def get(self, request, *args, **kwargs):
-#         token = extract_token(request)
-
-#         if not token:
-#             error_message = "Authorization Token must not be blank"
-#             return Response({"message": error_message}, status=status.HTTP_400_BAD_REQUEST)
-
-#         is_valid_token, response = validate_token(token)
-
-#         if not is_valid_token:
-#             error_message = response["detail"]
-#             return Response({"mesage": error_message}, status=status.HTTP_401_UNAUTHORIZED)
-
-#         owner_id = get_user_id(response)
-
-#         try:
-#             account = Account.objects.get(owner_id=owner_id)
-
-#         except Account.DoesNotExist:
-#             error_message = "The User does not have an account"
-#             return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
-
-#         serializer = AccountSerializer(account)
-
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 class AccountDetail(mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
