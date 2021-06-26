@@ -22,9 +22,6 @@ def get_account_from_owner(owner_id):
     accounts = response.json()
 
     if response.status_code == 200:
-        if len(accounts) == 0:
-            return {}
-
         for account in accounts:
             if account["owner_id"] == owner_id:
                 return account
@@ -32,6 +29,7 @@ def get_account_from_owner(owner_id):
         error = {"has_error": True, "error_message": accounts["message"]}
         return error
 
+    return {}
 
 def get_account_by_id(account_id):
     api_response = requests.get(f"http://account-api:8000/acct/account/{account_id}")

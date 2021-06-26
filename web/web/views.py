@@ -65,7 +65,11 @@ def register_account(request):
 
     if request.method == "POST":
         type_account = request.POST.get("type_account")
-        owner_id = request.session["user_id"]
+        try:
+            owner_id = request.session["user_id"]
+        except:
+            context = {"has_error": "index", "error_message": "Sessão expirada"}
+            return render(request, "error/erro.html", dict(context))
         balance = 0
         
         for i in range(MAX_TRIES):
@@ -141,8 +145,14 @@ def home(request):
 
         if api_response_user.status_code == 200:
             account = get_account_from_owner(owner_id)
-            
-            if "has_error" not in account:
+
+            if "has_error" in account:
+                return render(request, "error/erro.html", dict(account))
+
+            elif account == {}:
+                return redirect("http://localhost/register/account")
+
+            else:
                 account_card = get_card_from_account(account["id"])
 
                 transactions_account = get_transactions_from_account(account["id"])
@@ -150,10 +160,6 @@ def home(request):
                 context = {"username": payload["full_name"], "account": account, "card": account_card, "transactions": list(reversed(transactions_account))}
                 
                 return render(request, 'web/home.html', dict(context))
-            
-            else:
-                return render(request, "error/erro.html", dict(account))
-
         else:
             context = {"has_error": True, "error_message": payload["message"]}
             return render(request, "error/erro.html", dict(context))
