@@ -18,7 +18,7 @@
             {% csrf_token %}
             <input type="text" class="form-control" name="username" placeholder="Nome Completo" required autofocus>
             
-            <input type="text" class="form-control" name="cpf" placeholder="CPF" required>
+            <input type="text" class="form-control" name="cpf" placeholder="CPF" id="cpf" required>
 
             <input type="email" class="form-control" name="email" placeholder="E-mail" required autofocus>
             
@@ -46,4 +46,5 @@
 
 {% block js-files %} 
     <script src="{% static 'js/verifypassword.js' %}"></script>
+    <script src="{% static 'js/mask.js' %}"></script>
 {% endblock%}
