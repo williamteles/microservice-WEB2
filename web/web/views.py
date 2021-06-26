@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .utils import rand_N_digits
+from .utils import rand_N_digits, string_to_float
 from .cruds.cruds_functions import *
 import requests
 from datetime import datetime, date
@@ -217,7 +217,7 @@ def payment(request, account_id):
 
         date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
         time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
-        payment_value = float(request.POST.get("payment_value"))
+        payment_value = string_to_float(request.POST.get("payment_value"))
         type_transaction = "Pagamento"
 
         transaction_body = {
@@ -278,7 +278,7 @@ def deposit(request, account_id):
     if request.method == "POST":
         date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
         time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
-        deposit_value = float(request.POST.get("deposit_value"))
+        deposit_value = string_to_float(request.POST.get("deposit_value"))
         type_transaction = "Depósito"
 
         transaction_body = {
@@ -318,7 +318,7 @@ def transfer(request, account_id):
 
         date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
         time_transaction = datetime.strftime(datetime.now(), "%H:%M:%S")
-        transfer_value = float(request.POST.get("transfer_value"))
+        transfer_value = string_to_float(request.POST.get("transfer_value"))
         account_transfer_number = request.POST.get("account_transfer_number")
         type_transaction = "Transferência"
 
@@ -378,7 +378,7 @@ def buy(request, account_id):
     
     if request.method == "POST":
         payment_type = request.POST.get("payment_type")
-        buy_value = float(request.POST.get("buy_value"))
+        buy_value = string_to_float(request.POST.get("buy_value"))
         card_password = int(request.POST.get("card_password"))
         categories = request.POST.get("buy_type")
         date_transaction = datetime.strftime(date.today(), '%Y-%m-%d')
