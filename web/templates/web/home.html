@@ -165,7 +165,7 @@
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" id="money" name="payment_value" placeholder="Valor">
+                                            <input type="text" class="form-control" id="money" name="payment_value" placeholder="Valor" required>
                                         </div>
                                         <div class="col-md-5">
                                             <button class="btn-fibo-1" style="width: 100px;">Pagar</button>
@@ -183,7 +183,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Valor para depósito</label>
-                                    <input type="text" class="form-control" id="money" name="deposit_value" placeholder="Valor">
+                                    <input type="text" class="form-control" id="money" name="deposit_value" placeholder="Valor" required>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 15px;">
                                     <button class="btn-fibo-1" style="width: 100px;">Depositar</button>
@@ -198,11 +198,11 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <label>Valor</label>
-                                    <input type="text" class="form-control" id="money" name="transfer_value" placeholder="Valor">
+                                    <input type="text" class="form-control" id="money" name="transfer_value" placeholder="Valor" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label>Conta</label>
-                                    <input type="text" name="account_transfer_number" class="form-control">
+                                    <input type="number" name="account_transfer_number"  class="form-control" required>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 15px;"> 
                                     <button class="btn-fibo-1" style="width: 100px;">Transferir</button>
@@ -216,7 +216,7 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-12">
-                                    <select name="buy_type" id="" class="form-select">
+                                    <select name="buy_type" id="" class="form-select" required>
                                         <option selected>---- ----</option>
                                         <option value="Restaurante">Restaurante</option>
                                         <option value="Transporte">Transporte</option>
@@ -235,7 +235,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     {% if account.type_account == 'corrente'%}
-                                    <select name="payment_type" class="form-select">
+                                    <select name="payment_type" class="form-select" required>
                                         <option selected>---- ---</option>
                                         <option value="Débito">Débito</option>
                                         <option value="Crédito">Crédito</option>
@@ -249,7 +249,7 @@
                                 </div>
                                 
                                 <div class="col-md-3">
-                                    <input type="text" name="buy_value" class="form-control" id="money" placeholder="Valor">
+                                    <input type="text" name="buy_value" class="form-control" id="money" placeholder="Valor" required>
                                 </div>
                             </div>
 
@@ -286,4 +286,5 @@
     <script src="{% static 'js/dataAccount.js'%}"></script>
     <script src="{% static 'js/mask.js'%}"></script>
     <script src="{% static 'js/passwordCard.js'%}"></script>      
+    <script src="{% static 'js/onlyNumbers.js'%}"></script>      
 {% endblock %}
