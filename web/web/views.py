@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from .utils import rand_N_digits, string_to_float
-from .cruds.cruds_functions import *
+from .cruds import *
 import requests
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
