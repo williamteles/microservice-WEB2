@@ -18,13 +18,13 @@
             {% csrf_token %}
             <input type="text" class="form-control" name="full_name" placeholder="Nome Completo" required autofocus>
             
-            <input type="text" class="form-control" name="cpf" placeholder="CPF" id="cpf" required>
+            <input type="text" class="form-control" name="cpf" placeholder="CPF" id="cpf" minlength="14" required>
 
             <input type="email" class="form-control" name="email" placeholder="E-mail" required autofocus>
             
-            <input type="password" class="form-control" name="password1" placeholder="Senha" id='password_1' required>
+            <input type="password" class="form-control" name="password1" placeholder="Senha" id='password_1' minlength="6" required>
             
-            <input type="password" class="form-control" name="password2" placeholder="Confirmação de senha" id="password_2" required>
+            <input type="password" class="form-control" name="password2" placeholder="Confirmação de senha" id="password_2" minlength="6" required>
             
             
             <button type="submit" class="btn btn-lg btn-success" id="btn-register">Criar</button>
