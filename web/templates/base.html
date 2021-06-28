@@ -43,6 +43,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                           <li><a class="dropdown-item" href="{% url 'web:change_password' %}">Senha do cartão</a></li>
+                          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#desativar">Desativar conta</a></li>
                         </ul>
                       </li>
                     <li class="nav-item">
@@ -78,6 +79,28 @@
             </div>
           </div>
     </div>
+
+    <div class="modal fade" id="desativar" tabindex="-1" aria-labelledby="teste" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Desativar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="div-modal-body">
+                <h6 style="color: black">Desative sua conta.</h2>
+                <form action="" method="POST">
+                  <input type="password" class="form-control" name="user_password" placeholder="Senha da Conta" required autofocus minlength="6">
+                  <br>
+                  <button type="submit" class="btn btn-lg btn-success" id="btn-register">Desativar</button>
+                </form>
+              </div>
+            </div>
+          </div>
+    </div>
+
+
+
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="{% static 'js/isLogin.js'%}"></script>
