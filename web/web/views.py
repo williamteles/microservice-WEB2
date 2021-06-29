@@ -70,6 +70,7 @@ def register_account(request):
         except:
             context = {"has_error": "index", "error_message": "Sessão expirada"}
             return render(request, "error/erro.html", dict(context))
+        
         balance = 0
         
         for i in range(MAX_TRIES):
@@ -238,20 +239,20 @@ def payment(request, account_id):
 
         if "has_error" not in account:
             balance = float(account["balance"])
-            final_balance = round(balance - payment_value)
+            final_balance = round(balance - payment_value, 2)
 
             if final_balance < 0:
                 context = {"has_error": True, "error_message": "Saldo Insuficiente"}
                 return render(request, 'error/erro.html', dict(context))
             else:
                 card = get_card_from_account(account_id)
-                final_bill = round(float(card["bill"]) - payment_value)
+                final_bill = round(float(card["bill"]) - payment_value, 2)
                 if card["bill"] == "0.00":
                     return redirect("web:home")
                     
                 if final_bill < 0:
-                    final_balance = round(final_balance + abs(final_bill))
-                    transaction_body["value"] = round(payment_value + final_bill)
+                    final_balance = round(final_balance + abs(final_bill), 2)
+                    transaction_body["value"] = round(payment_value + final_bill, 2)
                     bill_update = update_card_bill(card["id"], 0)
                     
                     if "has_error" in bill_update:
@@ -347,7 +348,7 @@ def transfer(request, account_id):
                 }
 
             balance = float(account["balance"])
-            final_balance = round(balance - transfer_value)
+            final_balance = round(balance - transfer_value, 2)
 
             if final_balance < 0:
                 context = {"has_error": True, "error_message": "Saldo Insuficiente"}
@@ -355,7 +356,7 @@ def transfer(request, account_id):
             
             else:
                 balance_transfer =  float(account_transfer["balance"])
-                final_balance_transfer = round(balance_transfer + transfer_value)
+                final_balance_transfer = round(balance_transfer + transfer_value, 2)
                 
                 update_balance = update_account_balance(account_id, final_balance)
                 if "has_error" not in update_balance:
@@ -419,7 +420,7 @@ def buy(request, account_id):
                                 }
                         
                         balance = float(account["balance"])
-                        final_balance = round(balance - buy_value)
+                        final_balance = round(balance - buy_value, 2)
 
                         if final_balance < 0:
                             context = {"has_error": True, "error_message": "Saldo Insuficiente"}
@@ -453,7 +454,7 @@ def buy(request, account_id):
                                     }
                             
                             bill = float(card["bill"])
-                            final_bill = round(bill + buy_value)
+                            final_bill = round(bill + buy_value, 2)
 
                             if final_bill > float(card["limit"]):
                                 context = {"has_error": True, "error_message": "Limite Insuficiente"}
@@ -497,7 +498,8 @@ def extrato(request):
         try:
             owner_id = request.session["user_id"]
         except:
-            return redirect("web:index")
+            context = {"has_error": "index", "error_message": "Sessão expirada"}
+            return render(request, "error/erro.html", dict(context))
 
         account = get_account_from_owner(owner_id)
 
@@ -517,3 +519,40 @@ def extrato(request):
 def quit(request):
     request.session.flush()
     return redirect("web:index")
+
+
+def delete(request):
+    
+    if request.method == "POST":
+        try:
+            owner_id = request.session["user_id"]
+        except:
+            context = {"has_error": "index", "error_message": "Sessão expirada"}
+            return render(request, "error/erro.html", dict(context))
+
+        password = request.POST.get("user_password")
+        user = get_user_by_id(owner_id)
+
+        if "has_error" not in user:
+            account = get_account_from_owner(owner_id)
+            
+            if "has_error" not in account:
+                
+                if password == user["password"]:
+                    delete_account(account["id"])
+                    delete_user(owner_id)
+
+                    context = {"has_error": "index", "error_message": "Conta deletada"}
+                    return render(request, "error/erro.html", dict(context))
+                
+                else:
+                    context = {"has_error": True, "error_message": "Senha errada"}
+                    return render(request, 'error/erro.html', dict(context))
+            
+            else:
+                return render(request, 'error/erro.html', dict(account))
+        
+        else:
+            return render(request, 'error/erro.html', dict(user))
+    
+    return redirect("web:home")
