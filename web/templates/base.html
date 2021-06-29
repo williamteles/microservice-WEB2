@@ -43,7 +43,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                           <li><a class="dropdown-item" href="{% url 'web:change_password' %}">Senha do cartão</a></li>
-                          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#desativar">Desativar conta</a></li>
+                          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#desativar">Deletar conta</a></li>
                         </ul>
                       </li>
                     <li class="nav-item">
@@ -84,15 +84,16 @@
         <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Desativar</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Deletar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body" id="div-modal-body">
-                <h6 style="color: black">Desative sua conta.</h2>
-                <form action="" method="POST">
+                <h6 style="color: black">Delete sua conta.</h2>
+                <form action="{% url 'web:delete' %}" method="POST">
+                  {% csrf_token %}
                   <input type="password" class="form-control" name="user_password" placeholder="Senha da Conta" required autofocus minlength="6">
                   <br>
-                  <button type="submit" class="btn btn-lg btn-success" id="btn-register">Desativar</button>
+                  <button type="submit" class="btn btn-lg btn-success" id="btn-register">Deletar</button>
                 </form>
               </div>
             </div>
