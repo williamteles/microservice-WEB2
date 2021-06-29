@@ -76,13 +76,12 @@ def update_account_balance(acocunt_id, final_balance):
 
 def delete_account(account_id):
     api_response = requests.delete(f"http://account-api:8000/acct/account/{account_id}")
-    payload = api_response.json()
 
     if api_response.status_code not in (200, 204):
         error = {"has_error": True, "error_message": ""}
         return error
     
-    return payload
+    return {"message": "Deleted"}
 
 ################################################################################################################################
 ######################################################### CARD #################################################################
@@ -146,13 +145,12 @@ def update_card_bill(card_id, final_bill):
 
 def delete_card(card_id):
     api_response = requests.delete(f"http://account-api:8000/acct/card/{card_id}")
-    payload = api_response.json()
 
     if api_response.status_code not in (200, 204):
         error = {"has_error": True, "error_message": ""}
         return error
     
-    return payload
+    return {"message": "Deleted"}
 
 ################################################################################################################################
 ##################################################### TRANSACTION ##############################################################
@@ -282,3 +280,13 @@ def get_user_by_id(user_id):
     else:
         error = {"has_error": True, "error_message": user["message"]}
         return error
+
+
+def delete_user(user_id):
+    api_response = requests.delete(f"http://auth-api:8000/auth/user/{user_id}")
+
+    if api_response.status_code not in (200, 204):
+        error = {"has_error": True, "error_message": ""}
+        return error
+    
+    return {"message": "Deleted"}
