@@ -17,5 +17,6 @@ urlpatterns = [
     path(r'error/', views.error, name='error'),
     path(r'home/changepassword/', views.change_card_password, name='change_password'),
     path(r'home/ajax/extrato', views.extrato, name='extrato'),
-    path(r'quit/', views.quit, name='quit')
+    path(r'quit/', views.quit, name='quit'),
+    path(r'delete/', views.delete, name='delete')
  ]
