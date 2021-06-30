@@ -27,7 +27,7 @@ Aplicação demora cerca de uns 2 minutos para subir, depois de buildado.
 ### Acessar
 
 Após buildado e rodando, você pode abrir seu navegador e acessar o endereço localhost na porta 80.
-[localhost](http://localhost/ "Fibobank localhost")
+[localhost](http://ec2-3-238-121-62.compute-1.amazonaws.com "Fibobank localhost")
 
 ***
 ## Estudantes
