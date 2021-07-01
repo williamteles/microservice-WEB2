@@ -6,7 +6,7 @@ Utilizamos a arquitetura de microseviços, conforme a imagem:
 
 ![Imagem da aplicação](https://i.imgur.com/4IxyYV0.png)
 
-Como pode ser visto, essa aplicação está sendo hospedada num EC2 da AWS, onde pode ser acessada caso esteja rodando pelo link: [Fibobank](https://www.google.com "Fibobank")
+Como pode ser visto, essa aplicação está sendo hospedada num EC2 da AWS, onde pode ser acessada caso esteja rodando pelo link: [Fibobank](http://ec2-3-238-121-62.compute-1.amazonaws.com "Fibobank")
 
 Mas em caso de não conseguir acessar a aplicação pela AWS segue instruções de como usar instalar localmente.
 ***
@@ -27,7 +27,7 @@ Aplicação demora cerca de uns 2 minutos para subir, depois de buildado.
 ### Acessar
 
 Após buildado e rodando, você pode abrir seu navegador e acessar o endereço localhost na porta 80.
-[localhost](http://ec2-3-238-121-62.compute-1.amazonaws.com "Fibobank localhost")
+[localhost](http://localhost "Fibobank localhost")
 
 ***
 ## Estudantes
