@@ -1,5 +1,6 @@
 from datetime import datetime
 import requests
+from django.core.cache import cache
 
 
 ################################################################################################################################
@@ -14,20 +15,33 @@ def create_account(body):
         error = {"has_error": True, "error_message": payload["message"]}
         return error
     
+    if cache.get("accounts"):
+        cache.expire("accounts", timeout=0)
+        print("REMOVEU ACCOUNTS NO CACHE")
+
     return payload
 
 
 def get_account_from_owner(owner_id):
-    response = requests.get("http://account-api:8000/acct/account/")
-    accounts = response.json()
+    cached_accounts = cache.get("accounts")
 
-    if response.status_code == 200:
-        for account in accounts:
-            if account["owner_id"] == owner_id:
-                return account
+    if cached_accounts:
+        print("PEGOU ACCOUNTS NO CACHE")
+        accounts = cached_accounts
     else:
-        error = {"has_error": True, "error_message": accounts["message"]}
-        return error
+        response = requests.get("http://account-api:8000/acct/account/")
+        accounts = response.json()
+
+        if response.status_code != 200:
+            error = {"has_error": True, "error_message": accounts["message"]}
+            return error
+
+    cache.set("accounts", accounts, 60)
+    print("SETOU ACCOUNTS NO CACHE")
+
+    for account in accounts:
+        if account["owner_id"] == owner_id:
+            return account
 
     return {}
 
@@ -45,22 +59,27 @@ def get_account_by_id(account_id):
 
 
 def get_account_by_account_number(account_number):
-    api_response = requests.get("http://account-api:8000/acct/account/")
-    accounts = api_response.json()
-    
-    if api_response.status_code == 200:
-        for account in accounts:
-            
-            if account["account_number"] == account_number:
-                
-                return account
-        
-        error = {"has_error": True, "error_message": "Conta não encontrada"}
-        return error
-    
+    cached_accounts = cache.get("accounts")
+
+    if cached_accounts:
+        print("PEGOU ACCOUNTS NO CACHE")
+        accounts = cached_accounts
     else:
-        error = {"has_error": True, "error_message": accounts["message"]}
-        return error
+        response = requests.get("http://account-api:8000/acct/account/")
+        accounts = response.json()
+
+        if response.status_code != 200:
+            error = {"has_error": True, "error_message": accounts["message"]}
+            return error
+
+    cache.set("accounts", accounts, 60)
+    print("SETOU ACCOUNTS NO CACHE")
+
+    for account in accounts:
+        if account["account_number"] == account_number:
+            return account
+
+    return {} 
 
 
 def update_account_balance(acocunt_id, final_balance):
@@ -71,6 +90,9 @@ def update_account_balance(acocunt_id, final_balance):
         error = {"has_error": True, "error_message": "Atualização de saldo não sucedida"}
         return error
     
+    cache.expire("accounts", timeout=0)
+    print("REMOVEU ACCOUNTS NO CACHE")
+    
     return api_response.json()
 
 
@@ -80,7 +102,11 @@ def delete_account(account_id):
     if api_response.status_code not in (200, 204):
         error = {"has_error": True, "error_message": ""}
         return error
-    
+
+    cache.expire("accounts", timeout=0)
+    cache.expire("cards", timeout=0)
+    print("REMOVEU ACCOUNTS E CARDS NO CACHE")
+
     return {"message": "Deleted"}
 
 ################################################################################################################################
@@ -94,29 +120,41 @@ def create_card(body):
     if api_response.status_code != 201:
         error = {"has_error": True, "error_message": payload["message"]}
         return error
-    
+ 
+    if cache.get("cards"):
+        cache.expire("cards", timeout=0)
+        print("REMOVEU CARDS NO CACHE")
+
     return payload
 
 
 def get_card_from_account(account_id, convert=True):
-    response = requests.get("http://account-api:8000/acct/card/")
-    cards = response.json()
+    cached_cards = cache.get("cards")
 
-    if response.status_code == 200:
-        if len(cards) == 0:
-            return cards
-        
-        for card in cards:
-            if card["account"] == account_id:
-                if convert:
-                    expire_date_obj = datetime.strptime(card["expire_date"], '%Y-%m-%d')
-                    expire_date = datetime.strftime(expire_date_obj, '%m/%Y')
-                    card["expire_date"] = expire_date
-
-                return card        
+    if cached_cards:
+        print("PEGOU CARDS NO CACHE")
+        cards = cached_cards
     else:
-        error = {"has_error": True, "error_message": cards["message"]}
-        return error
+        response = requests.get("http://account-api:8000/acct/card/")
+        cards = response.json()
+
+        if response.status_code != 200:
+            error = {"has_error": True, "error_message": cards["message"]}
+            return error
+
+    cache.set("cards", cards, 60)
+    print("SETOU CARDS NO CACHE")
+
+    for card in cards:
+        if card["account"] == account_id:
+            if convert:
+                expire_date_obj = datetime.strptime(card["expire_date"], '%Y-%m-%d')
+                expire_date = datetime.strftime(expire_date_obj, '%m/%Y')
+                card["expire_date"] = expire_date
+
+            return card        
+
+    return []
 
 
 def update_card(card):
@@ -127,7 +165,10 @@ def update_card(card):
     if api_response.status_code not in (200, 204):
         error = {"has_error": True, "error_message": "Atualização de cartão não sucedida"}
         return error
-    
+
+    cache.expire("cards", timeout=0)
+    print("REMOVEU CARDS NO CACHE")
+
     return payload
 
 
@@ -139,7 +180,10 @@ def update_card_bill(card_id, final_bill):
     if api_response.status_code not in (200, 204):
         error = {"has_error": True, "error_message": "Atualização de fatura não sucedida"}
         return error
-    
+   
+    cache.expire("cards", timeout=0)
+    print("REMOVEU CARDS NO CACHE")
+
     return payload
 
 
@@ -150,6 +194,9 @@ def delete_card(card_id):
         error = {"has_error": True, "error_message": ""}
         return error
     
+    cache.expire("cards", timeout=0)
+    print("REMOVEU CARDS NO CACHE")
+
     return {"message": "Deleted"}
 
 ################################################################################################################################
@@ -266,15 +313,23 @@ def create_user(body):
     if api_response.status_code != 201:
         error = {"has_error": True, "error_message": payload["message"]}
         return error
-
+    
     return payload
 
 
 def get_user_by_id(user_id):
+    cached_user = cache.get(f"{user_id}:user")
+
+    if cached_user:
+        print("PEGOU USER NO CACHE")
+        return cached_user
+
     api_response = requests.get(f"http://auth-api:8000/auth/user/{user_id}")
     user = api_response.json()
 
     if api_response.status_code == 200:
+        cache.set(f"{user_id}:user", user, 60)
+        print("SETOU USER NO CACHE")
         return user
     
     else:
@@ -288,5 +343,11 @@ def delete_user(user_id):
     if api_response.status_code not in (200, 204):
         error = {"has_error": True, "error_message": ""}
         return error
+    
+    if cache.get(f"{user_id}:user"):
+        cache.expire(f"{user_id}:user", timeout=0)
+        cache.expire("accounts", timeout=0)
+        cache.expire("cards", timeout=0)
+        print("REMOVEU USER NO CACHE")
     
     return {"message": "Deleted"}
