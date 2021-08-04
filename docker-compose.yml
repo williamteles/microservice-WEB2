@@ -71,3 +71,8 @@ services:
           POSTGRES_PASSWORD: postgres
         volumes:
             - .auth_db_data:/var/lib/postgresql/data
+
+    cache:
+        container_name: redis-cache
+        image: redis:6.2.5
+        restart: always
