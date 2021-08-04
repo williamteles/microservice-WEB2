@@ -22,6 +22,6 @@ class CustomTokenVerifySerializer(TokenVerifySerializer):
     def format_(self, payload):
         return {
             "code": "token_is_valid",
-            "deails": "Token is valid",
+            "details": "Token is valid",
             "claims": payload,
         }
