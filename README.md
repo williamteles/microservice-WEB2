@@ -6,7 +6,7 @@ Utilizamos a arquitetura de microseviços, conforme a imagem:
 
 ![Imagem da aplicação](https://i.imgur.com/TW5gAVk.png)
 
-Como pode ser visto, essa aplicação está sendo hospedada num EC2 da AWS, onde pode ser acessada caso esteja rodando pelo link: [Fibobank](http://ec2-3-238-121-62.compute-1.amazonaws.com "Fibobank")
+Como pode ser visto, essa aplicação está sendo hospedada num EC2 da AWS, onde pode ser acessada caso esteja rodando pelo link: [Fibobank](http://ec2-54-147-135-10.compute-1.amazonaws.com "Fibobank")
 
 Mas em caso de não conseguir acessar a aplicação pela AWS segue instruções de como usar instalar localmente.
 ***
