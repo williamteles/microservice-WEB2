@@ -4,7 +4,7 @@ Criamos uma simulação de um Banco. Com nginx, uma aplicação Django, duas apl
 
 Utilizamos a arquitetura de microseviços, conforme a imagem:
 
-![Imagem da aplicação](https://i.imgur.com/4IxyYV0.png)
+![Imagem da aplicação](https://i.imgur.com/TW5gAVk.png)
 
 Como pode ser visto, essa aplicação está sendo hospedada num EC2 da AWS, onde pode ser acessada caso esteja rodando pelo link: [Fibobank](http://ec2-54-147-135-10.compute-1.amazonaws.com "Fibobank")
 
